@@ -4,9 +4,8 @@ import FilesForm from './FilesForm';
 import loadFilesModel from './model';
 import Err from '../../components/Err';
 import Spinner from './../../components/spinner';
-import CompareResult from '../../components/CompareResult';
 
-class CompareFiles extends React.Component {
+class Home extends React.Component {
   static displayName = 'CompareContent';
 
   constructor(...args) {
@@ -67,4 +66,4 @@ class CompareFiles extends React.Component {
   }
 }
 
-export default CompareFiles;
+export default Home;

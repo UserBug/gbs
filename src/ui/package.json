@@ -1,5 +1,4 @@
 {
-  "name"   : "public",
   "main"   : "server",
   "browser": "client"
 }

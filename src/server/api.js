@@ -1,7 +1,7 @@
 import express from 'express';
-import loadFileApi from './../models/loadFile/api';
+import homeApi from '../models/home/api';
 
 const router = new express.Router()
-  .use('/load_file', loadFileApi);
+  .use('/load_file', homeApi);
 
 export default router;
