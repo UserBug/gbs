@@ -1,0 +1,40 @@
+@import "colors.less";
+
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+
+    &.cover {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: @black-text;
+    }
+
+    &.sk-circle {
+      margin: -20px 0 0 -20px;
+    }
+
+    &.sk-three-bounce {
+      margin: -10px 0 0 -40px;
+    }
+  }
+}
+
+.sk-circle .sk-child::before {
+  background-color: @gray-text;
+}
+
+.sk-three-bounce .sk-child{
+  background-color: @gray-text;
+}

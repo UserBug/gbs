@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+}
+
+.page-header{
+    margin-top: 5px;
+}
+
+.panel-body,
+.panel-footer {
+    position: relative;
+}
+
+#page-wrapper{
+    position: relative;
+}
+
+.navbar-inverse{
+    background-color: #323941;
+}

@@ -1,0 +1,11 @@
+.idea
+node_modules
+bundles
+lib
+logs/*
+!/logs/.keep
+npm-debug.log
+!.keep
+/gulp/common/modules.json
+/gulp/common/modulesRequiredBy.json
+

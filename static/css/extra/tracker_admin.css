@@ -1,0 +1,10 @@
+div.sp-body{
+    display: block;
+}
+
+var.postImg{
+    display: inline-block;
+    min-width: 20px;
+    min-height: 20px;
+    background-color: #00d6b2;
+}
