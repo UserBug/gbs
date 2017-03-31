@@ -1,12 +1,22 @@
 'use strict';
 
-var gulp = require('gulp');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var modulesLarge = require('./common/modulesLarge.json');
+const gulp = require('gulp');
+const path = require('path');
+const browserify = require('browserify');
+const pathExists = require('path-exists');
+const source = require('vinyl-source-stream');
+
+// todo - move to params
+const rootPath = path.normalize(__dirname + '/../');
+const modulesFilePath = path.normalize(rootPath + '/common/modules.json');
+const modulesLargeFilePath = path.normalize(rootPath + '/common/modulesLarge.json');
 
 function buildLibBundle() {
-  var modules = require('./common/modules.json');
+  const modules = require(modulesFilePath);
+  let modulesLarge = [];
+  if (pathExists.sync(modulesLargeFilePath)) {
+    modulesLarge = require(modulesLargeFilePath);
+  }
   return browserify()
     .external(modulesLarge)
     .require(modules)

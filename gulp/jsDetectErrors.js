@@ -1,12 +1,11 @@
 'use strict';
 
-var gulp = require('gulp');
-var gulpIf = require('gulp-if');
-var eslint = require('gulp-eslint');
-var changed = require('gulp-changed');
-var count = require('gulp-count');
-var eslintLog = require('./common/eslintLog');
-var gulpFiles = ['gulpfile.js', 'gulp/**/*.js'];
+const gulp = require('gulp');
+const gulpIf = require('gulp-if');
+const eslint = require('gulp-eslint');
+const changed = require('gulp-changed');
+const count = require('gulp-count');
+const eslintLog = require('./common/eslintLog');
 
 /**
  * Has ESLint fixed the file contents

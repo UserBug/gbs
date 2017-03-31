@@ -1,29 +1,45 @@
 'use strict';
 
-var _ = require('lodash');
-var fs = require('fs-promise');
-var path = require('path');
-var mdeps = require('module-deps');
-var browserResolve = require('browser-resolve');
-var getEntries = require('./common/getEntries');
-var print = require('./common/print');
-var chalk = require('chalk');
-var rootPath = path.normalize(__dirname + '/../');
-var projectRootPath = path.normalize(__dirname + '/../');
-var modulesFilePath = path.normalize(__dirname + '/common/modules.json');
-var modulesLarge = require('./common/modulesLarge.json');
-var modulesRequiredInfoPath = path.normalize(__dirname + '/common/modulesRequiredBy.json');
-var modulesExceptions = require('./common/modulesExceptions.json');
+const _ = require('lodash');
+const path = require('path');
+const chalk = require('chalk');
+const fs = require('fs-promise');
+const mdeps = require('module-deps');
+const pathExists = require('path-exists');
+const browserResolve = require('browser-resolve');
+
+const getEntries = require('./common/getEntries');
+const print = require('./common/print');
+
+// todo - move to params
+const rootPath = path.normalize(__dirname + '/../');
+const entryPointsDirPath = rootPath + 'lib/';
+const entryPointsFileName = rootPath + 'client.js';
+const modulesFilePath = path.normalize(__dirname + '/common/modules.json');
+const modulesLargeFilePath = path.normalize(rootPath + '/common/modulesLarge.json');
+const modulesRequiredInfoPath = path.normalize(__dirname + '/common/modulesRequiredBy.json');
+const modulesExceptionsFilePath = path.normalize(rootPath + '/common/modulesExceptions.json');
 
 function findUsedModules() {
-  var modules = [];
-  var modulesRequiredInfo = {};
-  var entries = getEntries(['--all']);
+  const modules = [];
+  const modulesRequiredInfo = {};
+  const entries = getEntries(['--all']);
+
+  let modulesLarge = [];
+  if (pathExists.sync(modulesLargeFilePath)) {
+    modulesLarge = require(modulesLargeFilePath)
+  }
+
+  let modulesExceptions = [];
+  if (pathExists.sync(modulesExceptionsFilePath)) {
+    modulesLarge = require(modulesExceptionsFilePath)
+  }
+
   print('Search in ' + chalk.magenta(entries.length) + ' bundles');
 
-  var stream = mdeps({
+  const stream = mdeps({
     postFilter: function (id, filePath) {
-      var pattern = path.sep === '/' ? /\/node_modules\// : /\\node_modules\\/;
+      const pattern = path.sep === '/' ? /\/node_modules\// : /\\node_modules\\/;
       if (filePath && pattern.test(String(filePath))) {
         if (
           modules.indexOf(id) < 0 && modulesLarge.indexOf(id) < 0 && modulesExceptions.indexOf(id) < 0) {
@@ -34,8 +50,8 @@ function findUsedModules() {
       return id;
     },
     resolve: (id, parent, cb) => {
-      if (id.indexOf(projectRootPath) < 0) {
-        const parentFile = parent.filename.replace(projectRootPath, '');
+      if (id.indexOf(rootPath) < 0) {
+        const parentFile = parent.filename.replace(rootPath, '');
         if (!modulesRequiredInfo[id]) {
           modulesRequiredInfo[id] = {importByFiles: [], requiredByModules: []}
         }
@@ -47,7 +63,7 @@ function findUsedModules() {
     }
   });
   for (let i in entries) {
-    stream.write(path.normalize(rootPath + 'lib/' + entries[i] + '/client.js'))
+    stream.write(path.normalize(entryPointsDirPath + entries[i] + '/' + entryPointsFileName))
   }
   stream.on('end', function() {
     modules.sort();

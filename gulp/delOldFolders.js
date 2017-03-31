@@ -1,14 +1,16 @@
 'use strict';
 
-var pathExists = require('path-exists');
-var gulp = require('gulp');
-var del = require('del');
-var changed = require('gulp-changed');
-var count = require('gulp-count');
-var through = require('through2');
+const pathExists = require('path-exists');
+const gulp = require('gulp');
+const del = require('del');
+const changed = require('gulp-changed');
+const count = require('gulp-count');
+const through = require('through2');
+
+// todo - move ignoreStr to params
 
 function ignoreFiles(stream, cb, sourceFile, destPath) {
-  var ignoreStr = '/static';
+  const ignoreStr = '/static';
   if (sourceFile.path.indexOf(ignoreStr + '/') >= 0 || sourceFile.path.substr(- ignoreStr.length) === ignoreStr) {
     return cb();
   }
@@ -25,7 +27,7 @@ function ignoreFiles(stream, cb, sourceFile, destPath) {
 }
 
 function delOldFolders() {
-  var pathArr = [];
+  const pathArr = [];
   return gulp.src(['lib/**/*.js', 'lib/**/*.json', 'lib/**/*.dot', 'lib/**'])
     .pipe(changed('src', {hasChanged: ignoreFiles}))
     .pipe(count('delete ## old objects'))

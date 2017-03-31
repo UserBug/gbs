@@ -1,9 +1,7 @@
 'use strict';
 
-var gulp = require('gulp');
-var babel = require('gulp-babel');
-var changed = require('gulp-changed');
-var less = require('gulp-less');
+const gulp = require('gulp');
+const less = require('gulp-less');
 
 function buildCss() {
   return gulp.src('src/static/css/*.less')
