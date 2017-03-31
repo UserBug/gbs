@@ -3,11 +3,10 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var modules = require('./common/modules.json');
-var babel = require('gulp-babel');
 var modulesLarge = require('./common/modulesLarge.json');
 
 function buildLibBundle() {
+  var modules = require('./common/modules.json');
   return browserify()
     .external(modulesLarge)
     .require(modules)

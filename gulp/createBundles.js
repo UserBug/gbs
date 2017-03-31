@@ -7,12 +7,12 @@ var merge = require('merge-stream');
 var print = require('./common/print');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var modules = require('./common/modules.json');
 var getEntries = require('./common/getEntries');
 var modulesLarge = require('./common/modulesLarge.json');
 var rootPath = path.normalize(__dirname + '/../');
 
 function createBundle(entry) {
+  var modules = require('./common/modules.json');
   print('CreateBn', entry);
   var createBundle = browserify(rootPath + 'lib/' + entry + '/client.js')
     .external(modules)

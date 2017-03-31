@@ -1,10 +1,13 @@
 'use strict';
 
-var path = require('path');
 var fs = require('fs');
+var path = require('path');
+var mkdirp = require('mkdirp');
 var changed = require('gulp-changed');
-var rootPath = path.normalize(__dirname + '/../../');
-var logPath = path.normalize(rootPath + '/logs/eslintDetectErrorsLog.json');
+var pathExists = require('path-exists');
+var rootPath = path.normalize(__dirname + '/../');
+var logPath = path.normalize(rootPath + '/logs');
+var logFileName = 'eslintDetectErrorsLog.json';
 var previousErrors;
 
 try {
@@ -32,7 +35,10 @@ function writeErrorsLog(eslintResults) {
       files[getLocalPath(eslintResults[i].filePath)] = eslintResults[i].messages;
     }
   }
-  fs.writeFileSync(logPath, JSON.stringify({
+  if (!pathExists.sync(logPath)) {
+    mkdirp.sync(logPath)
+  }
+  fs.writeFileSync(logPath + '/' + logFileName, JSON.stringify({
     files: files,
     date: (new Date()).toString()
   }, null, 2))
@@ -40,7 +46,6 @@ function writeErrorsLog(eslintResults) {
 
 function needDetectErrorsInFile(stream, cb, sourceFile, destPath) {
   var srcPath = sourceFile.path;
-  destPath = destPath.replace(path.normalize('/lib/src/'), path.normalize('/lib/'));
   if (!previousErrors || getLocalPath(srcPath) in previousErrors.files) {
     stream.push(sourceFile);
     cb();
