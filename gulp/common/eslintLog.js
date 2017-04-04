@@ -1,14 +1,16 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var mkdirp = require('mkdirp');
-var changed = require('gulp-changed');
-var pathExists = require('path-exists');
-var rootPath = path.normalize(__dirname + '/../');
-var logPath = path.normalize(rootPath + '/logs');
-var logFileName = 'eslintDetectErrorsLog.json';
-var previousErrors;
+const fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const changed = require('gulp-changed');
+const pathExists = require('path-exists');
+let previousErrors;
+
+// todo - move to params
+const rootPath = path.normalize(__dirname + '/../');
+const logPath = path.normalize(rootPath + '/logs');
+const logFileName = 'eslintDetectErrorsLog.json';
 
 try {
   previousErrors = fs.readFileSync(logPath);
@@ -28,8 +30,8 @@ function getLocalPath(path) {
 }
 
 function writeErrorsLog(eslintResults) {
-  var files = {};
-  var i;
+  const files = {};
+  let i;
   for (i in eslintResults) {
     if (eslintResults[i].messages && eslintResults[i].messages.length) {
       files[getLocalPath(eslintResults[i].filePath)] = eslintResults[i].messages;
@@ -45,7 +47,7 @@ function writeErrorsLog(eslintResults) {
 }
 
 function needDetectErrorsInFile(stream, cb, sourceFile, destPath) {
-  var srcPath = sourceFile.path;
+  const srcPath = sourceFile.path;
   if (!previousErrors || getLocalPath(srcPath) in previousErrors.files) {
     stream.push(sourceFile);
     cb();

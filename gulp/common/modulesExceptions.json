@@ -1,6 +1,0 @@
-[
-  "babel-runtime/core-js/get-iterator",
-  "babel-runtime/core-js/json/stringify",
-  "babel-runtime/core-js/number/is-intege",
-  "babel-runtime/core-js/number/is-nan"
-]

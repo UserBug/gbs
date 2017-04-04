@@ -12,6 +12,11 @@ const getEntries = require('./common/getEntries');
 const print = require('./common/print');
 
 // todo - move to params
+const color = {
+  name: 'cyan',
+  time: 'magenta',
+  number: 'magenta',
+};
 const rootPath = path.normalize(__dirname + '/../');
 const entryPointsDirPath = rootPath + 'lib/';
 const entryPointsFileName = rootPath + 'client.js';
@@ -35,7 +40,7 @@ function findUsedModules() {
     modulesLarge = require(modulesExceptionsFilePath)
   }
 
-  print('Search in ' + chalk.magenta(entries.length) + ' bundles');
+  print('Search in ' + chalk[color.number](entries.length) + ' bundles');
 
   const stream = mdeps({
     postFilter: function (id, filePath) {

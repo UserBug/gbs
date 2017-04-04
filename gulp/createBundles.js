@@ -11,6 +11,11 @@ const getEntries = require('./common/getEntries');
 const print = require('./common/print');
 
 // todo - move to params
+const color = {
+  name: 'cyan',
+  time: 'magenta',
+  number: 'magenta',
+};
 const rootPath = path.normalize(__dirname + '/../');
 const entryPointsDirPath = rootPath + 'lib/';
 const entryPointsFileName = rootPath + 'client.js';
@@ -33,7 +38,7 @@ function createBundle(entry) {
 function createBundles() {
   const entries = getEntries();
   const streams = [];
-  print('Create ' + chalk.magenta(entries.length) + ' bundles');
+  print('Create ' + chalk[color.number](entries.length) + ' bundles');
   if (entries.length) {
     for (let i in entries) {
       streams.push(createBundle(entries[i]));
