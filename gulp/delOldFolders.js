@@ -7,11 +7,14 @@ const changed = require('gulp-changed');
 const count = require('gulp-count');
 const through = require('through2');
 
-// todo - move ignoreStr to params
+// todo - move delOldFoldersIgnoreStr to params
+const delOldFoldersIgnoreStr = '/static';
 
 function ignoreFiles(stream, cb, sourceFile, destPath) {
-  const ignoreStr = '/static';
-  if (sourceFile.path.indexOf(ignoreStr + '/') >= 0 || sourceFile.path.substr(- ignoreStr.length) === ignoreStr) {
+  if (
+    sourceFile.path.indexOf(delOldFoldersIgnoreStr + '/') >= 0 ||
+    sourceFile.path.substr(- delOldFoldersIgnoreStr.length) === delOldFoldersIgnoreStr
+  ) {
     return cb();
   }
 

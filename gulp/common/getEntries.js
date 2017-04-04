@@ -2,9 +2,9 @@
 
 const path = require('path');
 const pathExist = require('path-exists');
-const entryPoints = ['ui'];
 
 // todo - move to params
+const entryPoints = ['ui'];
 const rootPath = path.normalize(__dirname + '/../');
 const entryPointsDirPath = rootPath + 'lib/';
 const entryPointsFileName = rootPath + 'client.js';
