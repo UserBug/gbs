@@ -11,7 +11,7 @@ const rootPath = path.normalize(__dirname + '/../');
 const modulesFilePath = path.normalize(rootPath + '/common/modules.json');
 const modulesLargeFilePath = path.normalize(rootPath + '/common/modulesLarge.json');
 
-function buildLibBundle() {
+function buildLibBundle(config) {
   const modules = require(modulesFilePath);
   let modulesLarge = [];
   if (pathExists.sync(modulesLargeFilePath)) {

@@ -14,7 +14,7 @@ function isFixed(file) {
   return file.eslint != null && file.eslint.fixed;
 }
 
-function jsDetectErrors() {
+function jsDetectErrors(config) {
   return gulp.src(['src/**/*.js', 'src/**/*.jsx'], {base: './'})
     .pipe(changed('lib', {hasChanged: eslintLog.needDetectErrorsInFile}))
     .pipe(count('eslint parse ## files on errors'))

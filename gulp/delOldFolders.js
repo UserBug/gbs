@@ -29,7 +29,7 @@ function ignoreFiles(stream, cb, sourceFile, destPath) {
   });
 }
 
-function delOldFolders() {
+function delOldFolders(config) {
   const pathArr = [];
   return gulp.src(['lib/**/*.js', 'lib/**/*.json', 'lib/**/*.dot', 'lib/**'])
     .pipe(changed('src', {hasChanged: ignoreFiles}))

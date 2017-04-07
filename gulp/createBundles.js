@@ -35,7 +35,7 @@ function createBundle(entry) {
     .pipe(gulp.dest(bundlesDirPath));
 }
 
-function createBundles() {
+function createBundles(config) {
   const entries = getEntries();
   const streams = [];
   print('Create ' + chalk[color.number](entries.length) + ' bundles');

@@ -25,7 +25,7 @@ const modulesLargeFilePath = path.normalize(rootPath + '/common/modulesLarge.jso
 const modulesRequiredInfoPath = path.normalize(__dirname + '/common/modulesRequiredBy.json');
 const modulesExceptionsFilePath = path.normalize(rootPath + '/common/modulesExceptions.json');
 
-function findUsedModules() {
+function findUsedModules(config) {
   const modules = [];
   const modulesRequiredInfo = {};
   const entries = getEntries(['--all']);

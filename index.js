@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const gulp = require('gulp');
 const gulpFunctions = require('./gulp');
 const sequence = require('gulp-sequence');
@@ -31,7 +32,7 @@ function GBS(config) {
   if (configValidationErrors.length) {
     throw new Error('GBS config errors: \n' + configValidationErrors.join('\n'));
   }
-  this.config = config;
+  this.config = _.defaultsDeep({}, config, defaultConfig);
 
   for (const functionName in gulpFunctions) {
     this[functionName] = gulpFunctions[functionName].bind(null, this.config);
@@ -48,7 +49,7 @@ GBS.prototype.createGulp = function () {
 
   gulp.task('buildCss', this.buildCss);
   gulp.task('buildSrc', this.buildSrc);
-  
+
   gulp.task('prepare', sequence(
     '_delOldFolders',
     '_detectErrors',
