@@ -5,25 +5,20 @@ const defaultConfig = {
     number: 'magenta',
   },
 
-  entryPoints: [],
+  entryPointsFiles: '/lib/*/client.js',
   modulesLarge: [],
   modulesExceptions: [],
-  delOldFoldersIgnoreStr: '/static',
+  delOldFoldersIgnoreRegExp: /\/static/ig,
 
-  path: {
-    rootDir: path.normalize(__dirname + '/../'),
-    entryPointsDir: 'lib/',
-    bundlesDir: 'bundles/',
+  logDir: '/log',
+  srcDir: '/src',
+  libDir: '/lib',
+  bundlesDir: '/lib/bundles',
 
-    modulesFile: '/common/modules.json',
-    modulesRequiredInfoFile: '/common/modulesRequiredBy.json',
-    eslintDetectErrorsFile: '/logs/eslintDetectErrorsLog.json'
-  },
-
-  fileName: {
-    libsBundle: 'libs.js',
-    entryPoints: 'client.js'
-  }
+  libsBundleFileName: 'libs.js',
+  modulesFileName: 'modules.json',
+  modulesRequiredInfoFileName: 'modulesRequiredBy.json',
+  eslintDetectErrorsFileName: 'eslintDetectErrorsLog.json',
 };
 
 module.exports = defaultConfig;
