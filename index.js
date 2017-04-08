@@ -1,3 +1,5 @@
+'use strict';
+
 const _ = require('lodash');
 const gulp = require('gulp');
 const gulpFunctions = require('./gulp');
@@ -14,12 +16,14 @@ const checkConfig = require('./gulp/common/checkConfig');
  * @param {string}  [config.color.number]
  * @param {boolean} [config.uglifyLibBundle]
  * @param {string}  [config.entryPointsFiles]
- * @param {Array}   [config.modulesLarge]
+ * @param {string}  [config.lessEntryPointsFiles]
+ * @param {Array}   [config.modulesExternal]
  * @param {Array}   [config.modulesExceptions]
  * @param {RegExp}  [config.delOldFoldersIgnoreRegExp]
  * @param {string}  [config.logDir]
  * @param {string}  [config.srcDir]
  * @param {string}  [config.libDir]
+ * @param {string}  [config.cssDir]
  * @param {string}  [config.bundlesDir]
  * @param {string}  [config.libsBundleFileName]
  * @param {string}  [config.modulesFileName]

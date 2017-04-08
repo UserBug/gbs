@@ -21,7 +21,7 @@ const rootPath = path.normalize(__dirname + '/../');
 const entryPointsDirPath = rootPath + 'lib/';
 const entryPointsFileName = rootPath + 'client.js';
 const modulesFilePath = path.normalize(__dirname + '/common/modules.json');
-const modulesLargeFilePath = path.normalize(rootPath + '/common/modulesLarge.json');
+const modulesExternalFilePath = path.normalize(rootPath + '/common/modulesExternal.json');
 const modulesRequiredInfoPath = path.normalize(__dirname + '/common/modulesRequiredBy.json');
 const modulesExceptionsFilePath = path.normalize(rootPath + '/common/modulesExceptions.json');
 
@@ -30,14 +30,14 @@ function findUsedModules(config) {
   const modulesRequiredInfo = {};
   const entries = getEntries(['--all']);
 
-  let modulesLarge = [];
-  if (pathExists.sync(modulesLargeFilePath)) {
-    modulesLarge = require(modulesLargeFilePath)
+  let modulesExternal = [];
+  if (pathExists.sync(modulesExternalFilePath)) {
+    modulesExternal = require(modulesExternalFilePath)
   }
 
   let modulesExceptions = [];
   if (pathExists.sync(modulesExceptionsFilePath)) {
-    modulesLarge = require(modulesExceptionsFilePath)
+    modulesExternal = require(modulesExceptionsFilePath)
   }
 
   print('Search in ' + chalk[color.number](entries.length) + ' bundles');
@@ -47,7 +47,7 @@ function findUsedModules(config) {
       const pattern = path.sep === '/' ? /\/node_modules\// : /\\node_modules\\/;
       if (filePath && pattern.test(String(filePath))) {
         if (
-          modules.indexOf(id) < 0 && modulesLarge.indexOf(id) < 0 && modulesExceptions.indexOf(id) < 0) {
+          modules.indexOf(id) < 0 && modulesExternal.indexOf(id) < 0 && modulesExceptions.indexOf(id) < 0) {
           modules.push(id);
         }
         return false;

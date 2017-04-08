@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Default Config of GBS
  * @type {{
@@ -8,12 +10,14 @@
  *  },
  *  uglifyLibBundle: boolean,
  *  entryPointsFiles: string,
- *  modulesLarge: Array,
+ *  lessEntryPointsFiles: string,
+ *  modulesExternal: Array,
  *  modulesExceptions: Array,
  *  delOldFoldersIgnoreRegExp: RegExp,
  *  logDir: string,
  *  srcDir: string,
  *  libDir: string,
+ *  cssDir: string,
  *  bundlesDir: string,
  *  libsBundleFileName: string,
  *  modulesFileName: string,
@@ -30,13 +34,15 @@ const defaultConfig = {
 
   uglifyLibBundle: false,
   entryPointsFiles: '/lib/*/client.js',
-  modulesLarge: [],
+  lessEntryPointsFiles: '/src/static/css/*.less',
+  modulesExternal: [],
   modulesExceptions: [],
   delOldFoldersIgnoreRegExp: /\/static/ig,
 
   logDir: '/log',
   srcDir: '/src',
   libDir: '/lib',
+  cssDir: '/lib/static/css/',
   bundlesDir: '/lib/bundles',
 
   libsBundleFileName: 'libs.js',

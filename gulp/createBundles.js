@@ -10,38 +10,50 @@ const source = require('vinyl-source-stream');
 const getEntries = require('./common/getEntries');
 const print = require('./common/print');
 
-// todo - move to params
-const color = {
-  name: 'cyan',
-  time: 'magenta',
-  number: 'magenta',
-};
-const rootPath = path.normalize(__dirname + '/../');
-const entryPointsDirPath = rootPath + 'lib/';
-const entryPointsFileName = rootPath + 'client.js';
-const bundlesDirPath = rootPath + 'bundles/';
-const modulesFilePath = path.normalize(rootPath + '/common/modules.json');
-const modulesLargeFilePath = path.normalize(rootPath + '/common/modulesLarge.json');
+/**
+ * Create bundle from entry point
+ * @param {string}  entryName
+ * @param {string}  entryPath
+ * @param {string}  bundlesDir
+ * @param {Array}   [modules]
+ * @param {Array}   [modulesExternal]
+ * @returns {*}
+ */
+function createBundle(entryName, entryPath, bundlesDir, modules, modulesExternal) {
+  modules = modules || [];
+  modulesExternal = modulesExternal || [];
 
-function createBundle(entry) {
-  const modules = require(modulesFilePath);
-  const modulesLarge = require(modulesLargeFilePath);
-  print('CreateBn', entry);
-  return browserify(entryPointsDirPath + entry + '/' + entryPointsFileName)
+  print('CreateBn', entryName);
+  return browserify(entryPath)
     .external(modules)
-    .external(modulesLarge)
+    .external(modulesExternal)
     .bundle()
-    .pipe(source(entry + '.js'))
-    .pipe(gulp.dest(bundlesDirPath));
+    .pipe(source(entryName + '.js'))
+    .pipe(gulp.dest(bundlesDir));
 }
 
+/**
+ * Create bundles from entry points
+ * @param {{}}        config
+ * @param {string}    config.logDir
+ * @param {string}    config.bundlesDir
+ * @param {Array}     config.modulesExternal
+ * @param {{}}        config.color
+ * @param {string}    config.color.number
+ * @returns {*}
+ */
 function createBundles(config) {
-  const entries = getEntries();
+  const modules = require(path.normalize(config.logDir + '/modules.json'));
+  const entries = getEntries(config);
   const streams = [];
-  print('Create ' + chalk[color.number](entries.length) + ' bundles');
-  if (entries.length) {
-    for (let i in entries) {
-      streams.push(createBundle(entries[i]));
+  const entriesCount = Object.keys(entries).length;
+
+  print('Create ' + chalk[config.color.number](entriesCount + ' bundles'));
+  if (entriesCount) {
+    for (const entryName in entries) {
+      streams.push(createBundle(
+        entryName, entries[entryName], config.bundlesDir, modules, config.modulesExternal
+      ));
     }
     return merge.apply(null, streams);
   }
