@@ -2,10 +2,10 @@
 
 const _ = require('lodash');
 const gulp = require('gulp');
-const gulpFunctions = require('./gulp');
 const sequence = require('gulp-sequence');
+const gulpFunctions = require('./gulpFunctions');
 const defaultConfig = require('./defaultConfig');
-const checkConfig = require('./gulp/common/checkConfig');
+const checkConfig = require('./gulpFunctions/common/checkConfig');
 
 /**
  * Gulp Build System
