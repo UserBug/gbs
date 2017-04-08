@@ -1,14 +1,12 @@
 const gulpFunctions = {
-  gulp: require('gulp'),
-  sequence: require('gulp-sequence'),
-  buildSrc: require('./gulp/buildSrc'),
-  buildCss: require('./gulp/buildCss'),
-  delOldFolders: require('./gulp/delOldFolders'),
-  createBundles: require('./gulp/createBundles'),
-  jsDetectErrors: require('./gulp/jsDetectErrors'),
-  buildLibBundle: require('./gulp/buildLibBundle'),
-  uglifyLibBundle: require('./gulp/uglifyLibBundle'),
-  findUsedModules: require('./gulp/findUsedModules')
+  buildSrc: require('./buildSrc'),
+  buildCss: require('./buildCss'),
+  delOldFolders: require('./delOldFolders'),
+  createBundles: require('./createBundles'),
+  jsDetectErrors: require('./jsDetectErrors'),
+  buildLibBundle: require('./buildLibBundle'),
+  uglifyLibBundle: require('./uglifyLibBundle'),
+  findUsedModules: require('./findUsedModules')
 };
 
 module.exports = gulpFunctions;

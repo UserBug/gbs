@@ -16,23 +16,22 @@ function isFixed(file) {
 
 /**
  * Delete files and folders from libDir which not exist in srcDir
- * @param {{}}     config
- * @param {string} config.srcDir
- * @param {string} config.libDir
- * @param {RegExp} [config.delOldFoldersIgnoreRegExp]
- * @returns {*}
+ * @param {string}            srcDir
+ * @param {string}            libDir
+ * @param {string|undefined}  [eslintDetectErrorsFilePath]
+ * @returns {function}
  */
-function jsDetectErrors(config) {
-  const eslintDetectErrorsFilePath = config.logDir + '/' + config.eslintDetectErrorsFileName;
-
-  const previousErrors = eslintLog.getPreviousErrors(eslintDetectErrorsFilePath);
-  return gulp.src([config.srcDir + '/**/*.js', config.srcDir + '/**/*.jsx'], {base: './'})
-    .pipe(changed(config.libDir, {hasChanged: eslintLog.needDetectErrorsInFile.bind(null, previousErrors)}))
-    .pipe(count('eslint parse ## files on errors'))
-    .pipe(eslint({fix: true}))
-    .pipe(eslint.results(eslintLog.writeErrorsLog.bind(null, eslintDetectErrorsFilePath)))
-    .pipe(eslint.format())
-    .pipe(gulpIf(isFixed, gulp.dest('./')));
+function jsDetectErrors(srcDir, libDir, eslintDetectErrorsFilePath) {
+  return function () {
+    const previousErrors = eslintLog.getPreviousErrors(eslintDetectErrorsFilePath);
+    return gulp.src([srcDir + '/**/*.js', srcDir + '/**/*.jsx'], {base: './'})
+      .pipe(changed(libDir, {hasChanged: eslintLog.needDetectErrorsInFile.bind(null, previousErrors)}))
+      .pipe(count('eslint parse ## files on errors'))
+      .pipe(eslint({fix: true}))
+      .pipe(eslint.results(eslintLog.writeErrorsLog.bind(null, eslintDetectErrorsFilePath)))
+      .pipe(eslint.format())
+      .pipe(gulpIf(isFixed, gulp.dest('./')));
+  }
 }
 
 module.exports = jsDetectErrors;

@@ -16,17 +16,12 @@ const print = require('./common/print');
  * @param {string}  entryPath
  * @param {string}  bundlesDir
  * @param {Array}   [modules]
- * @param {Array}   [modulesExternal]
  * @returns {*}
  */
-function createBundle(entryName, entryPath, bundlesDir, modules, modulesExternal) {
-  modules = modules || [];
-  modulesExternal = modulesExternal || [];
-
+function createBundle(entryName, entryPath, bundlesDir, modules) {
   print('CreateBn', entryName);
   return browserify(entryPath)
-    .external(modules)
-    .external(modulesExternal)
+    .external(modules || [])
     .bundle()
     .pipe(source(entryName + '.js'))
     .pipe(gulp.dest(bundlesDir));
@@ -34,29 +29,30 @@ function createBundle(entryName, entryPath, bundlesDir, modules, modulesExternal
 
 /**
  * Create bundles from entry points
- * @param {{}}        config
- * @param {string}    config.logDir
- * @param {string}    config.modulesFileName
- * @param {string}    config.bundlesDir
- * @param {Array}     config.modulesExternal
- * @param {{}}        config.color
- * @param {string}    config.color.number
+ * @param {string}    entryPointsFiles
+ * @param {string}    bundlesDir
+ * @param {string}    modulesFilePath
+ * @param {Array}     modulesExternal
  * @returns {*}
  */
-function createBundles(config) {
-  const modules = require(path.normalize(config.logDir + '/' + config.modulesFileName));
-  const entries = getEntries(config);
-  const streams = [];
-  const entriesCount = Object.keys(entries).length;
+function createBundles(entryPointsFiles, bundlesDir, modulesFilePath, modulesExternal) {
+  const modulesExternal = modulesExternal || [];
 
-  print('Create ' + chalk[config.color.number](entriesCount + ' bundles'));
-  if (entriesCount) {
-    for (const entryName in entries) {
-      streams.push(createBundle(
-        entryName, entries[entryName], config.bundlesDir, modules, config.modulesExternal
-      ));
+  return function () {
+    const modules = modulesFilePath ? require(path.normalize(modulesFilePath)) : [];
+    const entries = getEntries(entryPointsFiles);
+    const streams = [];
+    const entriesCount = Object.keys(entries).length;
+
+    print('Create ' + chalk.magenta(entriesCount + ' bundles'));
+    if (entriesCount) {
+      for (const entryName in entries) {
+        streams.push(createBundle(
+          entryName, entries[entryName], bundlesDir, modules.concat(modulesExternal)
+        ));
+      }
+      return merge.apply(null, streams);
     }
-    return merge.apply(null, streams);
   }
 }
 

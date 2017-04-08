@@ -37,29 +37,30 @@ function ignoreFiles(delOldFoldersIgnoreRegExp, stream, cb, sourceFile, destPath
 
 /**
  * Delete files and folders from libDir which not exist in srcDir
- * @param {{}}     config
- * @param {string} config.srcDir
- * @param {string} config.libDir
- * @param {RegExp} [config.delOldFoldersIgnoreRegExp]
- * @returns {*}
+ * @param {string}            srcDir
+ * @param {string}            libDir
+ * @param {RegExp|undefined}  [delOldFoldersIgnoreRegExp]
+ * @returns {function}
  */
-function delOldFolders(config) {
-  const delOldFoldersIgnoreRegExp = config.delOldFoldersIgnoreRegExp || null;
+function delOldFolders(srcDir, libDir, delOldFoldersIgnoreRegExp) {
+  const delOldFoldersIgnoreRegExp = delOldFoldersIgnoreRegExp || null;
   const pathArr = [];
-  return gulp.src([
-    config.libDir + '/**/*.js',
-    config.libDir + '/**/*.json',
-    config.libDir + '/**/*.dot',
-    config.libDir + '/**'
-  ])
-    .pipe(changed(config.srcDir, {hasChanged: ignoreFiles.bind(delOldFoldersIgnoreRegExp)}))
-    .pipe(count('delete ## old objects'))
-    .pipe(through.obj(function(file, enc, cb) {
-      pathArr.push(file.path);
-      return cb(null, file);
-    }, function(cb) {
-      del(pathArr).then(cb.bind(null, null)).catch(cb);
-    }));
+  return function () {
+    return gulp.src([
+      libDir + '/**/*.js',
+      libDir + '/**/*.json',
+      libDir + '/**/*.dot',
+      libDir + '/**'
+    ])
+      .pipe(changed(srcDir, {hasChanged: ignoreFiles.bind(delOldFoldersIgnoreRegExp)}))
+      .pipe(count('delete ## old objects'))
+      .pipe(through.obj(function(file, enc, cb) {
+        pathArr.push(file.path);
+        return cb(null, file);
+      }, function(cb) {
+        del(pathArr).then(cb.bind(null, null)).catch(cb);
+      }));
+  }
 }
 
 module.exports = delOldFolders;

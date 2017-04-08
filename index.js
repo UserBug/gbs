@@ -10,10 +10,6 @@ const checkConfig = require('./gulpFunctions/common/checkConfig');
 /**
  * Gulp Build System
  * @param {{}}      config
- * @param {{}}      [config.color]
- * @param {string}  [config.color.name]
- * @param {string}  [config.color.time]
- * @param {string}  [config.color.number]
  * @param {boolean} [config.uglifyLibBundle]
  * @param {string}  [config.entryPointsFiles]
  * @param {string}  [config.lessEntryPointsFiles]
@@ -29,30 +25,64 @@ const checkConfig = require('./gulpFunctions/common/checkConfig');
  * @param {string}  [config.modulesFileName]
  * @param {string}  [config.modulesRequiredInfoFileName]
  * @param {string}  [config.eslintDetectErrorsFileName]
- * @constructor
  */
-function GBS(config) {
+function setGulpTasks(config) {
   const configValidationErrors = checkConfig(defaultConfig, config);
   if (configValidationErrors.length) {
     throw new Error('GBS config errors: \n' + configValidationErrors.join('\n'));
   }
-  this.config = _.defaultsDeep({}, config, defaultConfig);
+  config = _.defaultsDeep({}, config, defaultConfig);
+  const modulesFilePath = config.logDir + '/' + config.modulesFileName;
 
-  for (const functionName in gulpFunctions) {
-    this[functionName] = gulpFunctions[functionName].bind(null, this.config);
-  }
-}
+  gulp.task('_delOldFolders', gulpFunctions.delOldFolders(
+    config.srcDir,
+    config.libDir,
+    config.delOldFoldersIgnoreRegExp
+  ));
 
-GBS.prototype.createGulp = function () {
-  gulp.task('_delOldFolders', this.delOldFolders);
-  gulp.task('_detectErrors', this.jsDetectErrors);
-  gulp.task('_createBundles', this.createBundles);
-  gulp.task('_buildLibBundle', this.buildLibBundle);
-  gulp.task('_uglifyLibBundle', this.uglifyLibBundle);
-  gulp.task('_findUsedModules', this.findUsedModules);
+  gulp.task('_detectErrors', gulpFunctions.jsDetectErrors(
+    config.srcDir,
+    config.libDir,
+    config.logDir + '/' + config.eslintDetectErrorsFileName
+  ));
 
-  gulp.task('buildCss', this.buildCss);
-  gulp.task('buildSrc', this.buildSrc);
+  gulp.task('_createBundles', gulpFunctions.createBundles(
+    config.entryPointsFiles,
+    config.bundlesDir,
+    modulesFilePath,
+    config.modulesExternal
+  ));
+
+  gulp.task('_buildLibBundle', gulpFunctions.buildLibBundle(
+    config.bundlesDir,
+    config.libsBundleFileName,
+    modulesFilePath,
+    config.modulesExternal
+  ));
+
+  gulp.task('_uglifyLibBundle', gulpFunctions.uglifyLibBundle(
+    config.bundlesDir,
+    config.libsBundleFileName
+  ));
+
+  gulp.task('_findUsedModules', gulpFunctions.findUsedModules(
+    config.entryPointsFiles,
+    config.logDir,
+    config.modulesFileName,
+    config.modulesRequiredInfoFileName,
+    config.modulesExternal,
+    config.modulesExceptions
+  ));
+
+  gulp.task('_buildCss', gulpFunctions.buildCss(
+    config.lessEntryPointsFiles,
+    config.cssDir
+  ));
+
+  gulp.task('_buildSrc', gulpFunctions.buildSrc(
+    config.srcDir,
+    config.libDir
+  ));
 
   gulp.task('prepare', sequence(
     '_delOldFolders',
@@ -62,9 +92,9 @@ GBS.prototype.createGulp = function () {
 
   gulp.task('buildLib', sequence(
     'prepare',
-    '_findUsedModules',
+    'findUsedModules',
     '_buildLibBundle',
-    this.config.uglifyLibBundle ? '_uglifyLibBundle' : undefined
+    config.uglifyLibBundle ? '_uglifyLibBundle' : undefined
   ));
 
   gulp.task('build', sequence(
@@ -75,7 +105,14 @@ GBS.prototype.createGulp = function () {
   gulp.task('default', sequence('build'));
 
   return gulp;
-};
+}
 
-gulpFunctions.default = gulpFunctions.GBS = GBS;
-module.exports = gulpFunctions;
+module.exports = {
+  default: setGulpTasks,
+  setGulpTasks: setGulpTasks,
+  buildCss: gulpFunctions.buildCss,
+  buildSrc: gulpFunctions.buildSrc,
+  detectErrors: gulpFunctions.detectErrors,
+  createBundles: gulpFunctions.createBundles,
+  findUsedModules: gulpFunctions.findUsedModules,
+};

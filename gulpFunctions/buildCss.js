@@ -5,15 +5,16 @@ const less = require('gulp-less');
 
 /**
  * Compile less to css
- * @param {{}}      config
- * @param {string}  config.lessEntryPointsFiles
- * @param {string}  config.cssDir
- * @returns {*}
+ * @param {string}  lessEntryPointsFiles
+ * @param {string}  cssDir
+ * @returns {function}
  */
-function buildCss(config) {
-  return gulp.src(config.lessEntryPointsFiles)
-    .pipe(less({paths: '.'}))
-    .pipe(gulp.dest(config.cssDir));
+function buildCss(lessEntryPointsFiles, cssDir) {
+  return function () {
+    return gulp.src(lessEntryPointsFiles)
+      .pipe(less({paths: '.'}))
+      .pipe(gulp.dest(cssDir));
+  }
 }
 
 module.exports = buildCss;

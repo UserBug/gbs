@@ -4,7 +4,7 @@ const _ = require('lodash');
  * Validate config object
  * @param {{}} defaultConfig
  * @param {{}} config
- * @returns {String[]}
+ * @returns {Array}
  */
 function checkConfig(defaultConfig, config) {
   const configValidationErrors = [];

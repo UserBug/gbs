@@ -3,11 +3,6 @@
 /**
  * Default Config of GBS
  * @type {{
- *  color: {
- *   name: string,
- *   time: string,
- *   number: string
- *  },
  *  uglifyLibBundle: boolean,
  *  entryPointsFiles: string,
  *  lessEntryPointsFiles: string,
@@ -26,12 +21,6 @@
  * }}
  */
 const defaultConfig = {
-  color: {
-    name: 'cyan',
-    time: 'magenta',
-    number: 'magenta',
-  },
-
   uglifyLibBundle: false,
   entryPointsFiles: '/lib/*/client.js',
   lessEntryPointsFiles: '/src/static/css/*.less',

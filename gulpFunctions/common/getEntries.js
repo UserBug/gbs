@@ -3,7 +3,7 @@
 const path = require('path');
 const pathExist = require('path-exists');
 
-function getEntries(config, keys) {
+function getEntries(entryPointsFiles, keys) {
   const entries = {};
   console.log('config.entryPointsFiles ', config.entryPointsFiles);
   return entries;

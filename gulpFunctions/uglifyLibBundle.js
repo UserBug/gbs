@@ -5,15 +5,16 @@ const uglify = require('gulp-uglify');
 
 /**
  * Compress bundle with library's
- * @param {{}} config
- * @param {string} config.bundlesDir
- * @param {string} config.libsBundleFileName
- * @returns {*}
+ * @param {string} bundlesDir
+ * @param {string} libsBundleFileName
+ * @returns {function}
  */
-function buildLibBundle(config) {
-  return gulp.src(config.bundlesDir + '/' + config.libsBundleFileName)
-    .pipe(uglify())
-    .pipe(gulp.dest(config.bundlesDir));
+function buildLibBundle(bundlesDir, libsBundleFileName) {
+  return function () {
+    return gulp.src(bundlesDir + '/' + libsBundleFileName)
+      .pipe(uglify())
+      .pipe(gulp.dest(bundlesDir));
+  }
 }
 
 module.exports = buildLibBundle;

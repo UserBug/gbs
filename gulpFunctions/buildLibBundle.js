@@ -1,31 +1,27 @@
 'use strict';
 
 const gulp = require('gulp');
-const path = require('path');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 
 /**
  * Join npm modules to single bundle
- * @param {{}}        config
- * @param {string}    config.logDir
- * @param {string}    config.modulesFileName
- * @param {string}    config.bundlesDir
- * @param {string[]}  [config.modulesExternal]
- * @param {string}    [config.libsBundleFileName]
- * @returns {*}
+ * @param {string}    bundlesDir
+ * @param {string}    libsBundleFileName
+ * @param {string}    [modulesFilePath]
+ * @param {string[]}  [modulesExternal]
+ * @returns {function}
  */
-function buildLibBundle(config) {
-  const libsBundleFileName = config.libsBundleFileName || 'libs.js';
-  const modulesFilePath = path.normalize(config.logDir + '/' + config.modulesFileName);
-  const modules = require(modulesFilePath);
-
-  return browserify()
-    .external(config.modulesExternal || [])
-    .require(modules)
-    .bundle()
-    .pipe(source(libsBundleFileName))
-    .pipe(gulp.dest(config.bundlesDir));
+function buildLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modulesExternal) {
+  return function () {
+    const modules = modulesFilePath ? require(modulesFilePath) : [];
+    return browserify()
+      .external(modulesExternal || [])
+      .require(modules)
+      .bundle()
+      .pipe(source(libsBundleFileName))
+      .pipe(gulp.dest(bundlesDir));
+  }
 }
 
 module.exports = buildLibBundle;
