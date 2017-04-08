@@ -36,6 +36,7 @@ function createBundle(entryName, entryPath, bundlesDir, modules, modulesExternal
  * Create bundles from entry points
  * @param {{}}        config
  * @param {string}    config.logDir
+ * @param {string}    config.modulesFileName
  * @param {string}    config.bundlesDir
  * @param {Array}     config.modulesExternal
  * @param {{}}        config.color
@@ -43,7 +44,7 @@ function createBundle(entryName, entryPath, bundlesDir, modules, modulesExternal
  * @returns {*}
  */
 function createBundles(config) {
-  const modules = require(path.normalize(config.logDir + '/modules.json'));
+  const modules = require(path.normalize(config.logDir + '/' + config.modulesFileName));
   const entries = getEntries(config);
   const streams = [];
   const entriesCount = Object.keys(entries).length;

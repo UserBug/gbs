@@ -9,6 +9,7 @@ const source = require('vinyl-source-stream');
  * Join npm modules to single bundle
  * @param {{}}        config
  * @param {string}    config.logDir
+ * @param {string}    config.modulesFileName
  * @param {string}    config.bundlesDir
  * @param {string[]}  [config.modulesExternal]
  * @param {string}    [config.libsBundleFileName]
@@ -16,7 +17,7 @@ const source = require('vinyl-source-stream');
  */
 function buildLibBundle(config) {
   const libsBundleFileName = config.libsBundleFileName || 'libs.js';
-  const modulesFilePath = path.normalize(config.logDir + '/modules.json');
+  const modulesFilePath = path.normalize(config.logDir + '/' + config.modulesFileName);
   const modules = require(modulesFilePath);
 
   return browserify()

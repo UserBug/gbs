@@ -5,49 +5,44 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-promise');
 const mdeps = require('module-deps');
-const pathExists = require('path-exists');
 const browserResolve = require('browser-resolve');
 
 const getEntries = require('./common/getEntries');
 const print = require('./common/print');
 
-// todo - move to params
-const color = {
-  name: 'cyan',
-  time: 'magenta',
-  number: 'magenta',
-};
-const rootPath = path.normalize(__dirname + '/../');
-const entryPointsDirPath = rootPath + 'lib/';
-const entryPointsFileName = rootPath + 'client.js';
-const modulesFilePath = path.normalize(__dirname + '/common/modules.json');
-const modulesExternalFilePath = path.normalize(rootPath + '/common/modulesExternal.json');
-const modulesRequiredInfoPath = path.normalize(__dirname + '/common/modulesRequiredBy.json');
-const modulesExceptionsFilePath = path.normalize(rootPath + '/common/modulesExceptions.json');
-
+/**
+ * Find used in bundles modules and print info to
+ * @param {{}}     config
+ * @param {string} config.logDir
+ * @param {string} config.modulesFileName
+ * @param {string} config.modulesRequiredInfoFileName
+ * @param {Array}  [config.modulesExternal]
+ * @param {Array}  [config.modulesExceptions]
+ * @param {RegExp} [config.delOldFoldersIgnoreRegExp]
+ * @param {string} [config.color]
+ * @param {string} [config.color.number]
+ * @returns {*}
+ */
 function findUsedModules(config) {
   const modules = [];
   const modulesRequiredInfo = {};
-  const entries = getEntries(['--all']);
+  const entries = getEntries(config, ['--all']);
+  const entriesCount = Object.keys(entries).length;
+  const modulesExternal = config.modulesExternal || [];
+  const modulesExceptions = config.modulesExceptions || [];
 
-  let modulesExternal = [];
-  if (pathExists.sync(modulesExternalFilePath)) {
-    modulesExternal = require(modulesExternalFilePath)
-  }
+  print('Search in ' + chalk[config.color.number](entriesCount) + ' bundles');
 
-  let modulesExceptions = [];
-  if (pathExists.sync(modulesExceptionsFilePath)) {
-    modulesExternal = require(modulesExceptionsFilePath)
-  }
-
-  print('Search in ' + chalk[color.number](entries.length) + ' bundles');
-
+  const rootPath = path.normalize('/');
+  const pattern = path.sep === '/' ? /\/node_modules\// : /\\node_modules\\/;
   const stream = mdeps({
     postFilter: function (id, filePath) {
-      const pattern = path.sep === '/' ? /\/node_modules\// : /\\node_modules\\/;
       if (filePath && pattern.test(String(filePath))) {
         if (
-          modules.indexOf(id) < 0 && modulesExternal.indexOf(id) < 0 && modulesExceptions.indexOf(id) < 0) {
+          modules.indexOf(id) < 0 &&
+          modulesExternal.indexOf(id) < 0 &&
+          modulesExceptions.indexOf(id) < 0
+        ) {
           modules.push(id);
         }
         return false;
@@ -67,13 +62,16 @@ function findUsedModules(config) {
       return browserResolve(id, parent, cb);
     }
   });
-  for (let i in entries) {
-    stream.write(path.normalize(entryPointsDirPath + entries[i] + '/' + entryPointsFileName))
+  for (const entryName in entries) {
+    stream.write(path.normalize(entries[entryName]))
   }
   stream.on('end', function() {
     modules.sort();
-    fs.writeFile(modulesRequiredInfoPath, JSON.stringify(_.pick(modulesRequiredInfo, modules), null, 2));
-    fs.writeFileSync(modulesFilePath, JSON.stringify(modules, null, 2));
+    fs.writeFile(
+      config.logDir + '/' + config.modulesRequiredInfoFileName,
+      JSON.stringify(_.pick(modulesRequiredInfo, modules), null, 2)
+    );
+    fs.writeFileSync(config.logDir + '/' + config.modulesFileName, JSON.stringify(modules, null, 2));
   });
   stream.end();
 

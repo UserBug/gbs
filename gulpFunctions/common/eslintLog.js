@@ -2,53 +2,72 @@
 
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 const changed = require('gulp-changed');
-const pathExists = require('path-exists');
-let previousErrors;
-
-// todo - move to params
-const rootPath = path.normalize(__dirname + '/../');
-const logPath = path.normalize(rootPath + '/logs');
-const logFileName = 'eslintDetectErrorsLog.json';
-
-try {
-  previousErrors = fs.readFileSync(logPath);
-  if (previousErrors) {
-    previousErrors = JSON.parse(previousErrors);
-  }
-} catch (e) {
-  previousErrors = null;
-}
-
-if (previousErrors && !previousErrors.files) {
-  previousErrors = null;
-}
+const rootPath = path.normalize('/');
 
 function getLocalPath(path) {
   return path.replace(rootPath, '');
 }
 
-function writeErrorsLog(eslintResults) {
-  const files = {};
-  let i;
-  for (i in eslintResults) {
-    if (eslintResults[i].messages && eslintResults[i].messages.length) {
-      files[getLocalPath(eslintResults[i].filePath)] = eslintResults[i].messages;
+/**
+ * Get object with previous eslint errors
+ * @param {string} [eslintDetectErrorsFilePath]
+ * @returns {{}|null}
+ */
+function getPreviousErrors(eslintDetectErrorsFilePath) {
+  let previousErrors = null;
+
+  if (eslintDetectErrorsFilePath) {
+    try {
+      previousErrors = fs.readFileSync(eslintDetectErrorsFilePath);
+      if (previousErrors) {
+        previousErrors = JSON.parse(previousErrors);
+      }
+    }
+
+    if (previousErrors && !previousErrors.files) {
+      previousErrors = null;
     }
   }
-  if (!pathExists.sync(logPath)) {
-    mkdirp.sync(logPath)
-  }
-  fs.writeFileSync(logPath + '/' + logFileName, JSON.stringify({
-    files: files,
-    date: (new Date()).toString()
-  }, null, 2))
+
+  return previousErrors;
 }
 
-function needDetectErrorsInFile(stream, cb, sourceFile, destPath) {
-  const srcPath = sourceFile.path;
-  if (!previousErrors || getLocalPath(srcPath) in previousErrors.files) {
+/**
+ * Write log file "eslintDetectErrorsLog.json" with eslint errors
+ * @param {string|undefined} eslintDetectErrorsFilePath
+ * @param {Array} eslintResults
+ */
+function writeErrorsLog(eslintDetectErrorsFilePath, eslintResults) {
+  if (eslintDetectErrorsFilePath) {
+    const files = {};
+    let i;
+    for (i in eslintResults) {
+      if (eslintResults[i].messages && eslintResults[i].messages.length) {
+        files[getLocalPath(eslintResults[i].filePath)] = eslintResults[i].messages;
+      }
+    }
+    fs.writeFileSync(eslintDetectErrorsFilePath, JSON.stringify({
+      files: files,
+      date: (new Date()).toString()
+    }, null, 2))
+  }
+}
+
+/**
+ * This file need to ignore and leave in libDir
+ * @param {{}|null}     previousErrors
+ * @param {Array}       previousErrors.files
+ * @param {{}}          stream
+ * @param {function}    stream.push
+ * @param {function}    cb
+ * @param {{}}          sourceFile
+ * @param {string}      sourceFile.path
+ * @param {string}      destPath
+ * @returns {*}
+ */
+function needDetectErrorsInFile(previousErrors, stream, cb, sourceFile, destPath) {
+  if (!previousErrors || getLocalPath(sourceFile.path) in previousErrors.files) {
     stream.push(sourceFile);
     cb();
   } else {
@@ -60,5 +79,6 @@ function needDetectErrorsInFile(stream, cb, sourceFile, destPath) {
 
 module.exports = {
   needDetectErrorsInFile: needDetectErrorsInFile,
+  getPreviousErrors: getPreviousErrors,
   writeErrorsLog: writeErrorsLog
 };

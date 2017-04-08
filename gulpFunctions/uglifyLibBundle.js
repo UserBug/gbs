@@ -1,18 +1,19 @@
 'use strict';
 
 const gulp = require('gulp');
-const path = require('path');
 const uglify = require('gulp-uglify');
 
-// todo - move to params
-const rootPath = path.normalize(__dirname + '/../');
-const libsBundleFileName = 'libs.js';
-const bundlesDirPath = rootPath + 'bundles/';
-
+/**
+ * Compress bundle with library's
+ * @param {{}} config
+ * @param {string} config.bundlesDir
+ * @param {string} config.libsBundleFileName
+ * @returns {*}
+ */
 function buildLibBundle(config) {
-  return gulp.src(bundlesDirPath + libsBundleFileName)
+  return gulp.src(config.bundlesDir + '/' + config.libsBundleFileName)
     .pipe(uglify())
-    .pipe(gulp.dest(bundlesDirPath));
+    .pipe(gulp.dest(config.bundlesDir));
 }
 
 module.exports = buildLibBundle;
