@@ -77,4 +77,5 @@ GBS.prototype.createGulp = function () {
   return gulp;
 };
 
-module.exports = GBS;
+gulpFunctions.default = gulpFunctions.GBS = GBS;
+module.exports = gulpFunctions;
