@@ -1,6 +1,7 @@
 'use strict';
 
 const del = require('del');
+const path = require('path');
 const gulp = require('gulp');
 const count = require('gulp-count');
 const through = require('through2');
@@ -20,7 +21,7 @@ const pathExists = require('path-exists');
  * @returns {*}
  */
 function ignoreFiles(delOldFoldersIgnoreRegExp, stream, cb, sourceFile, destPath) {
-  if (delOldFoldersIgnoreRegExp && sourceFile.path.match(delOldFoldersIgnoreRegExp)) {
+  if (delOldFoldersIgnoreRegExp && sourceFile.path && sourceFile.path.match(delOldFoldersIgnoreRegExp)) {
     return cb();
   }
 
@@ -43,7 +44,7 @@ function ignoreFiles(delOldFoldersIgnoreRegExp, stream, cb, sourceFile, destPath
  * @returns {function}
  */
 function delOldFolders(srcDir, libDir, delOldFoldersIgnoreRegExp) {
-  const delOldFoldersIgnoreRegExp = delOldFoldersIgnoreRegExp || null;
+  delOldFoldersIgnoreRegExp = delOldFoldersIgnoreRegExp || null;
   const pathArr = [];
   return function () {
     return gulp.src([
@@ -52,7 +53,7 @@ function delOldFolders(srcDir, libDir, delOldFoldersIgnoreRegExp) {
       libDir + '/**/*.dot',
       libDir + '/**'
     ])
-      .pipe(changed(srcDir, {hasChanged: ignoreFiles.bind(delOldFoldersIgnoreRegExp)}))
+      .pipe(changed(srcDir, {hasChanged: ignoreFiles.bind(null, delOldFoldersIgnoreRegExp)}))
       .pipe(count('delete ## old objects'))
       .pipe(through.obj(function(file, enc, cb) {
         pathArr.push(file.path);

@@ -23,7 +23,7 @@ function getPreviousErrors(eslintDetectErrorsFilePath) {
       if (previousErrors) {
         previousErrors = JSON.parse(previousErrors);
       }
-    }
+    } catch (err) {}
 
     if (previousErrors && !previousErrors.files) {
       previousErrors = null;

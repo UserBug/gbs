@@ -1,8 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const gulp = require('gulp');
-const sequence = require('gulp-sequence');
 const gulpFunctions = require('./gulpFunctions');
 const defaultConfig = require('./defaultConfig');
 const checkConfig = require('./gulpFunctions/common/checkConfig');
@@ -26,14 +24,16 @@ const checkConfig = require('./gulpFunctions/common/checkConfig');
  * @param {string}  [config.modulesRequiredInfoFileName]
  * @param {string}  [config.eslintDetectErrorsFileName]
  */
-function setGulpTasks(config) {
+function setGulpTasks(gulp, config) {
+  console.log('start setGulpTasks');
   const configValidationErrors = checkConfig(defaultConfig, config);
   if (configValidationErrors.length) {
-    throw new Error('GBS config errors: \n' + configValidationErrors.join('\n'));
+    throw new Error('GBS config errors \n' + configValidationErrors.join('\n'));
   }
   config = _.defaultsDeep({}, config, defaultConfig);
   const modulesFilePath = config.logDir + '/' + config.modulesFileName;
 
+  const sequence = require('gulp-sequence').use(gulp);
   gulp.task('_delOldFolders', gulpFunctions.delOldFolders(
     config.srcDir,
     config.libDir,
@@ -104,15 +104,14 @@ function setGulpTasks(config) {
 
   gulp.task('default', sequence('build'));
 
+  console.log('done setGulpTasks');
   return gulp;
 }
 
-module.exports = {
-  default: setGulpTasks,
-  setGulpTasks: setGulpTasks,
-  buildCss: gulpFunctions.buildCss,
-  buildSrc: gulpFunctions.buildSrc,
-  detectErrors: gulpFunctions.detectErrors,
-  createBundles: gulpFunctions.createBundles,
-  findUsedModules: gulpFunctions.findUsedModules,
-};
+for (const functionName in gulpFunctions) {
+  if (gulpFunctions.hasOwnProperty(functionName)) {
+    setGulpTasks[functionName] = gulpFunctions[functionName];
+  }
+}
+
+module.exports = setGulpTasks;

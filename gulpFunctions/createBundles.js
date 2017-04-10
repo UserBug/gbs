@@ -36,7 +36,7 @@ function createBundle(entryName, entryPath, bundlesDir, modules) {
  * @returns {*}
  */
 function createBundles(entryPointsFiles, bundlesDir, modulesFilePath, modulesExternal) {
-  const modulesExternal = modulesExternal || [];
+  modulesExternal = modulesExternal || [];
 
   return function () {
     const modules = modulesFilePath ? require(path.normalize(modulesFilePath)) : [];

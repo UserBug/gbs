@@ -26,7 +26,7 @@ const defaultConfig = {
   lessEntryPointsFiles: '/src/static/css/*.less',
   modulesExternal: [],
   modulesExceptions: [],
-  delOldFoldersIgnoreRegExp: /\/static/ig,
+  delOldFoldersIgnoreRegExp: /[\/\\]static([\/\\]|$)/ig,
 
   logDir: '/log',
   srcDir: '/src',

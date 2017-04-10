@@ -1,12 +1,11 @@
-const _ = require('lodash');
-
 /**
  * Validate config object
  * @param {{}} defaultConfig
- * @param {{}} config
+ * @param {{}} [config]
  * @returns {Array}
  */
 function checkConfig(defaultConfig, config) {
+  config = config || {};
   const configValidationErrors = [];
 
   function addError(message) {
@@ -20,10 +19,16 @@ function checkConfig(defaultConfig, config) {
     }
   }
 
-  const unknownConfigs = _.xor(Object.keys(defaultConfig), Object.keys(config));
-  if (unknownConfigs.length) {
-    addError('Find unknown configs -> "' + unknownConfigs.join('", "') + '"');
+  const unknownConfigs = [];
+  for (const configName in config) {
+    if (!defaultConfig.hasOwnProperty(configName)) {
+      unknownConfigs.push(configName);
+    }
   }
+  if (unknownConfigs.length) {
+    addError('You are trying to set unknown configs -> "' + unknownConfigs.join('", "') + '"');
+  }
+
 
   for (const key in defaultConfig) {
     if (typeof config[key] !== 'undefined' && typeof config[key] !== typeof defaultConfig[key]) {
