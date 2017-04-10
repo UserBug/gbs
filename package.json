@@ -1,6 +1,20 @@
 {
   "name": "gbs",
   "version": "1.0.0",
+  "author": {
+    "email": "proboo.dev@gmail.comm",
+    "name": "Stas Kochenkov"
+  },
+  "bugs": {
+    "url": "https://bitbucket.org/Stas-k/gbs/overview"
+  },
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/Stas-k/gbs/overview",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://Stas-k@bitbucket.org/Stas-k/gbs.git"
+  },
   "dependencies": {
     "browser-resolve": "^1.11.2",
     "browserify": "^13.0.0",
