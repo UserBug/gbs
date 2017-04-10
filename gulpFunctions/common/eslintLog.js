@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const mkdirp = require('mkdirp');
 const changed = require('gulp-changed');
 const rootPath = path.normalize('/');
 
@@ -47,6 +48,7 @@ function writeErrorsLog(eslintDetectErrorsFilePath, eslintResults) {
         files[getLocalPath(eslintResults[i].filePath)] = eslintResults[i].messages;
       }
     }
+    mkdirp.sync(eslintDetectErrorsFilePath.substring(0, eslintDetectErrorsFilePath.lastIndexOf('/')));
     fs.writeFileSync(eslintDetectErrorsFilePath, JSON.stringify({
       files: files,
       date: (new Date()).toString()

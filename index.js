@@ -43,7 +43,7 @@ function setGulpTasks(gulp, config) {
   gulp.task('_detectErrors', gulpFunctions.jsDetectErrors(
     config.srcDir,
     config.libDir,
-    config.logDir + '/' + config.eslintDetectErrorsFileName
+    config.eslintDetectErrorsFileName ? config.logDir + '/' + config.eslintDetectErrorsFileName : null
   ));
 
   gulp.task('_createBundles', gulpFunctions.createBundles(

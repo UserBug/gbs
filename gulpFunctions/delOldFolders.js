@@ -1,7 +1,6 @@
 'use strict';
 
 const del = require('del');
-const path = require('path');
 const gulp = require('gulp');
 const count = require('gulp-count');
 const through = require('through2');
