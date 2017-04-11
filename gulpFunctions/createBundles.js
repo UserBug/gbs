@@ -3,6 +3,8 @@
 const gulp = require('gulp');
 const path = require('path');
 const chalk = require('chalk');
+const count = require('gulp-count');
+const through = require('through2');
 const merge = require('merge-stream');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
@@ -40,19 +42,19 @@ function createBundles(entryPointsFiles, bundlesDir, modulesFilePath, modulesExt
 
   return function () {
     const modules = modulesFilePath ? require(path.resolve(modulesFilePath)) : [];
-    const entries = getEntries(entryPointsFiles);
-    const streams = [];
-    const entriesCount = Object.keys(entries).length;
+    const stream = merge();
+    getEntries(entryPointsFiles)
+      .pipe(count('Create ## bundles'))
+      .pipe(through.obj(function(file, enc, cb) {
+        console.log('entry name:', file.entrieName);
+        console.log('entry path:', file.path);
+        stream.add(createBundle(
+          file.entrieName, file.path, bundlesDir, modules.concat(modulesExternal)
+        ))
+        return cb(null, file.path);
+      }));
 
-    print('Create ' + chalk.magenta(entriesCount + ' bundles'));
-    if (entriesCount) {
-      for (const entryName in entries) {
-        streams.push(createBundle(
-          entryName, entries[entryName], bundlesDir, modules.concat(modulesExternal)
-        ));
-      }
-      return merge.apply(null, streams);
-    }
+    return stream;
   }
 }
 

@@ -4,7 +4,6 @@ const gulp = require('gulp');
 const through = require('through2');
 
 function getEntries(entryPointsFiles, keys) {
-  const entries = {};
   console.log('entryPointsFiles ', entryPointsFiles);
 
   const starPosition = entryPointsFiles.lastIndexOf('*');
@@ -22,15 +21,10 @@ function getEntries(entryPointsFiles, keys) {
         name = file.path.split('\\').pop().split('/').pop();
       }
       name = name.substr(0, name.lastIndexOf('.'));
-      console.log({name: name, path: file.path});
-      file._GBSEntrieName = name;
+      file.entrieName = name;
       return cb(null, file);
     }));
 
-
-  console.log('entries', entries);
-  throw new Error('STOP');
-  return entries;
   /*
     keys = keys || process.argv.slice(2);
     let entriesKeys = [];

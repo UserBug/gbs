@@ -16,6 +16,7 @@
     "url": "git+https://Stas-k@bitbucket.org/Stas-k/gbs.git"
   },
   "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "browser-resolve": "^1.11.2",
     "browserify": "^13.0.0",
     "chalk": "^1.1.3",

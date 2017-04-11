@@ -21,7 +21,10 @@ function buildSrc(srcDir, libDir) {
         );
       }}))
       .pipe(count('babel transplit ## files'))
-      .pipe(babel())
+      .pipe(babel({
+        plugins: ['transform-class-properties', 'transform-runtime'],
+        presets: ['es2015', 'stage-0', 'react']
+      }))
       .pipe(gulp.dest(libDir));
 
     const copyJson = gulp.src(srcDir + '/**/*.json')
