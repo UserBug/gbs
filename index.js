@@ -65,7 +65,7 @@ function setGulpTasks(gulp, config) {
     config.libsBundleFileName
   ));
 
-  gulp.task('_findUsedModules', gulpFunctions.findUsedModules(
+  gulp.task('findUsedModules', gulpFunctions.findUsedModules(
     config.entryPointsFiles,
     config.logDir,
     config.modulesFileName,
@@ -74,12 +74,12 @@ function setGulpTasks(gulp, config) {
     config.modulesExceptions
   ));
 
-  gulp.task('_buildCss', gulpFunctions.buildCss(
+  gulp.task('buildCss', gulpFunctions.buildCss(
     config.lessEntryPointsFiles,
     config.cssDir
   ));
 
-  gulp.task('_buildSrc', gulpFunctions.buildSrc(
+  gulp.task('buildSrc', gulpFunctions.buildSrc(
     config.srcDir,
     config.libDir
   ));

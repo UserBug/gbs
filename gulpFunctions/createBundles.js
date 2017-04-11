@@ -39,7 +39,7 @@ function createBundles(entryPointsFiles, bundlesDir, modulesFilePath, modulesExt
   modulesExternal = modulesExternal || [];
 
   return function () {
-    const modules = modulesFilePath ? require(path.normalize(modulesFilePath)) : [];
+    const modules = modulesFilePath ? require(path.resolve(modulesFilePath)) : [];
     const entries = getEntries(entryPointsFiles);
     const streams = [];
     const entriesCount = Object.keys(entries).length;

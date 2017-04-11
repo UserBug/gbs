@@ -1,6 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
+const path = require('path');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 
@@ -14,7 +15,7 @@ const source = require('vinyl-source-stream');
  */
 function buildLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modulesExternal) {
   return function () {
-    const modules = modulesFilePath ? require(modulesFilePath) : [];
+    const modules = modulesFilePath ? require(path.resolve(modulesFilePath)) : [];
     return browserify()
       .external(modulesExternal || [])
       .require(modules)

@@ -28,7 +28,7 @@ const defaultConfig = {
   modulesExceptions: [],
   delOldFoldersIgnoreRegExp: /[\/\\]static([\/\\]|$)/ig,
 
-  logDir: '/log',
+  logDir: '/logs/gbs',
   srcDir: '/src',
   libDir: '/lib',
   cssDir: '/lib/static/css/',
