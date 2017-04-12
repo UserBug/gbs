@@ -43,17 +43,34 @@ function createBundles(entryPointsFiles, bundlesDir, modulesFilePath, modulesExt
   return function () {
     const modules = modulesFilePath ? require(path.resolve(modulesFilePath)) : [];
     const stream = merge();
+    let countEntries = 0;
     getEntries(entryPointsFiles)
       .pipe(count('Create ## bundles'))
-      .pipe(through.obj(function(file, enc, cb) {
-        console.log('entry name:', file.entrieName);
-        console.log('entry path:', file.path);
+      .on('data', function (file) {
+        countEntries++;
         stream.add(createBundle(
           file.entrieName, file.path, bundlesDir, modules.concat(modulesExternal)
         ))
-        return cb(null, file.path);
-      }));
+      })
+      .on('end', function () {
+        console.log('stream getEntries END');
+        if(!countEntries){
+          stream.end();
+        }
+      })
+      /*.pipe(through.obj(function(file, enc, cb) {
+        console.log('entry name:', file.entrieName);
+        console.log('entry path:', file.path);
+        if(file) {
+          stream.add(createBundle(
+            file.entrieName, file.path, bundlesDir, modules.concat(modulesExternal)
+          ))
+        }
+        this.push(file)
+        return cb();
+      }));*/
 
+    /*stream.pipe(count('Create ## bundles'));*/
     return stream;
   }
 }

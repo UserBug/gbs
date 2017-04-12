@@ -4,7 +4,16 @@ const gulp = require('gulp');
 const through = require('through2');
 
 function getEntries(entryPointsFiles, keys) {
+  keys = keys || process.argv.slice(2);
   console.log('entryPointsFiles ', entryPointsFiles);
+
+  let entriesKeys = [];
+  if (keys || keys.length || keys.indexOf('--all') < 0) {
+    entriesKeys = keys.map(function (key) {
+      return key.substr(2);
+    });
+  }
+  console.log('entriesKeys', entriesKeys);
 
   const starPosition = entryPointsFiles.lastIndexOf('*');
   let removePathFromEntrieName = '';
@@ -22,32 +31,12 @@ function getEntries(entryPointsFiles, keys) {
       }
       name = name.substr(0, name.lastIndexOf('.'));
       file.entrieName = name;
-      return cb(null, file);
+      console.log('name', '"' + name + '"', 'skip', entriesKeys.length && entriesKeys.indexOf(name)< 0);
+      if(!entriesKeys.length || entriesKeys.indexOf(name) >= 0) {
+        this.push(file);
+      }
+      return cb();
     }));
-
-  /*
-    keys = keys || process.argv.slice(2);
-    let entriesKeys = [];
-    const entries = [];
-    if (!keys || !keys.length || keys[0] === '--all') {
-      entriesKeys = entryPoints;
-    } else {
-      for (const i in keys) {
-        if (keys[i].substr(0, 2) === '--') {
-          keys[i] = keys[i].substr(2);
-          if (entryPoints.indexOf(keys[i]) >= 0) {
-            entriesKeys.push(keys[i])
-          }
-        }
-      }
-    }
-    for (const i in entriesKeys) {
-      if (pathExist.sync(entryPointsDirPath + entriesKeys[i] + '/' + entryPointsFileName)) {
-        entries.push(entriesKeys[i]);
-      }
-    }
-    return entries;
-  */
 }
 
 module.exports = getEntries;
