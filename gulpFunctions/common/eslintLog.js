@@ -74,7 +74,6 @@ function needDetectErrorsInFile(previousErrors, srcDir, stream, cb, sourceFile, 
     stream.push(sourceFile);
     cb();
   } else {
-    console.log(sourceFile.path, '||', destPath);
     changed.compareLastModifiedTime(stream, cb, sourceFile,
       destPath.slice(-4) === '.jsx' ? destPath.slice(0, -1) : destPath
     );

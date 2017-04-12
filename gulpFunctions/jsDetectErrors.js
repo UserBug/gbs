@@ -1,7 +1,6 @@
 'use strict';
 
 const gulp = require('gulp');
-const path = require('path');
 const gulpIf = require('gulp-if');
 const eslint = require('gulp-eslint');
 const changed = require('gulp-changed');
@@ -12,7 +11,7 @@ const eslintLog = require('./common/eslintLog');
  * Has ESLint fixed the file contents
  */
 function isFixed(file) {
-  return file.eslint != null && file.eslint.fixed;
+  return file.eslint !== null && file.eslint.fixed;
 }
 
 /**
@@ -23,7 +22,6 @@ function isFixed(file) {
  * @returns {function}
  */
 function jsDetectErrors(srcDir, libDir, eslintDetectErrorsFilePath) {
-  console.log('jsDetectErrors libDir', libDir);
   return function () {
     const previousErrors = eslintLog.getPreviousErrors(eslintDetectErrorsFilePath);
     return gulp.src([srcDir + '/**/*.js', srcDir + '/**/*.jsx'])
