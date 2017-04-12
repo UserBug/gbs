@@ -9,6 +9,7 @@ const checkConfig = require('./gulpFunctions/common/checkConfig');
  * Gulp Build System
  * @param {{}}      config
  * @param {boolean} [config.uglifyLibBundle]
+ * @param {boolean|string|Array} [config.uglifyBundles]
  * @param {string}  [config.entryPointsFiles]
  * @param {string}  [config.lessEntryPointsFiles]
  * @param {Array}   [config.modulesExternal]
@@ -25,7 +26,6 @@ const checkConfig = require('./gulpFunctions/common/checkConfig');
  * @param {string}  [config.eslintDetectErrorsFileName]
  */
 function setGulpTasks(gulp, config) {
-  console.log('start setGulpTasks');
   const configValidationErrors = checkConfig(defaultConfig, config);
   if (configValidationErrors.length) {
     throw new Error('GBS config errors \n' + configValidationErrors.join('\n'));
@@ -60,8 +60,14 @@ function setGulpTasks(gulp, config) {
     config.modulesExternal
   ));
 
-  gulp.task('_uglifyLibBundle', gulpFunctions.uglifyLibBundle(
+  gulp.task('_uglifyLibBundle', gulpFunctions.uglifyBundles(
     config.bundlesDir,
+    config.libsBundleFileName
+  ));
+
+  gulp.task('_uglifyBundles', gulpFunctions.uglifyBundles(
+    config.bundlesDir,
+    config.uglifyBundles,
     config.libsBundleFileName
   ));
 
@@ -99,12 +105,12 @@ function setGulpTasks(gulp, config) {
 
   gulp.task('build', sequence(
     'prepare',
-    '_createBundles'
+    '_createBundles',
+    config.uglifyBundles ? '_uglifyBundles' : undefined
   ));
 
   gulp.task('default', sequence('build'));
 
-  console.log('done setGulpTasks');
   return gulp;
 }
 

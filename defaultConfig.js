@@ -4,6 +4,7 @@
  * Default Config of GBS
  * @type {{
  *  uglifyLibBundle: boolean,
+ *  uglifyBundles: boolean|string|Array,
  *  entryPointsFiles: string,
  *  lessEntryPointsFiles: string,
  *  modulesExternal: Array,
@@ -21,11 +22,12 @@
  * }}
  */
 const defaultConfig = {
+  uglifyBundles: false,
   uglifyLibBundle: false,
   entryPointsFiles: '/lib/*/client.js',
   lessEntryPointsFiles: '/src/static/css/*.less',
   modulesExternal: [],
-  modulesExceptions: ['react', 'react-dom'],
+  modulesExceptions: ['react', 'react-dom', 'react-router'],
   delOldFoldersIgnoreRegExp: /[\/\\]static([\/\\]|$)/ig,
 
   logDir: 'logs/build',

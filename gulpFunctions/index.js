@@ -5,7 +5,7 @@ const gulpFunctions = {
   createBundles: require('./createBundles'),
   jsDetectErrors: require('./jsDetectErrors'),
   buildLibBundle: require('./buildLibBundle'),
-  uglifyLibBundle: require('./uglifyLibBundle'),
+  uglifyBundles: require('./uglifyBundles'),
   findUsedModules: require('./findUsedModules')
 };
 

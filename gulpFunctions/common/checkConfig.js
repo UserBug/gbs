@@ -31,7 +31,11 @@ function checkConfig(defaultConfig, config) {
 
 
   for (const key in defaultConfig) {
-    if (typeof config[key] !== 'undefined' && typeof config[key] !== typeof defaultConfig[key]) {
+    if (
+      key !== 'uglifyBundles' &&
+      typeof config[key] !== 'undefined' &&
+      typeof config[key] !== typeof defaultConfig[key]
+    ) {
       addError(
         'Wrong type of config "' + key + '", ' +
         'expect "' + (typeof defaultConfig[key]) + '" got "' + (typeof config[key]) + '"'

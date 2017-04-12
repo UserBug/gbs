@@ -7,7 +7,7 @@
 const gulp = require('gulp');
 const setGulpTasks = require('gbs');
 setGulpTasks(gulp, {
-  uglifyLibBundle: false,
+  uglifyBundles: false,
   entryPointsFiles: '/lib/ui/client.js',
   lessEntryPointsFiles: '/src/static/css/*.less',
   modulesExternal: ['react'],

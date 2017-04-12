@@ -2,9 +2,7 @@
 
 const gulp = require('gulp');
 const path = require('path');
-const chalk = require('chalk');
 const count = require('gulp-count');
-const through = require('through2');
 const merge = require('merge-stream');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
