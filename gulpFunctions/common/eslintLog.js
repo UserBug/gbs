@@ -1,13 +1,11 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 const mkdirp = require('mkdirp');
 const changed = require('gulp-changed');
-const rootPath = path.normalize('/');
 
-function getLocalPath(path) {
-  return path.replace(rootPath, '');
+function getLocalPath(srcDir, filePath) {
+  return filePath.substr(filePath.lastIndexOf(srcDir) + srcDir.length);
 }
 
 /**
@@ -36,16 +34,17 @@ function getPreviousErrors(eslintDetectErrorsFilePath) {
 
 /**
  * Write log file "eslintDetectErrorsLog.json" with eslint errors
- * @param {string|undefined} eslintDetectErrorsFilePath
- * @param {Array} eslintResults
+ * @param {string}            srcDir
+ * @param {string|undefined}  eslintDetectErrorsFilePath
+ * @param {Array}             eslintResults
  */
-function writeErrorsLog(eslintDetectErrorsFilePath, eslintResults) {
+function writeErrorsLog(srcDir, eslintDetectErrorsFilePath, eslintResults) {
   if (eslintDetectErrorsFilePath) {
     const files = {};
     let i;
     for (i in eslintResults) {
       if (eslintResults[i].messages && eslintResults[i].messages.length) {
-        files[getLocalPath(eslintResults[i].filePath)] = eslintResults[i].messages;
+        files[getLocalPath(srcDir, eslintResults[i].filePath)] = eslintResults[i].messages;
       }
     }
     mkdirp.sync(eslintDetectErrorsFilePath.substring(0, eslintDetectErrorsFilePath.lastIndexOf('/')));
@@ -60,6 +59,7 @@ function writeErrorsLog(eslintDetectErrorsFilePath, eslintResults) {
  * This file need to ignore and leave in libDir
  * @param {{}|null}     previousErrors
  * @param {Array}       previousErrors.files
+ * @param {string}      srcDir
  * @param {{}}          stream
  * @param {function}    stream.push
  * @param {function}    cb
@@ -68,11 +68,13 @@ function writeErrorsLog(eslintDetectErrorsFilePath, eslintResults) {
  * @param {string}      destPath
  * @returns {*}
  */
-function needDetectErrorsInFile(previousErrors, stream, cb, sourceFile, destPath) {
-  if (!previousErrors || getLocalPath(sourceFile.path) in previousErrors.files) {
+function needDetectErrorsInFile(previousErrors, srcDir, stream, cb, sourceFile, destPath) {
+  const filePath = getLocalPath(srcDir, sourceFile.path);
+  if (!previousErrors || filePath in previousErrors.files) {
     stream.push(sourceFile);
     cb();
   } else {
+    console.log(sourceFile.path, '||', destPath);
     changed.compareLastModifiedTime(stream, cb, sourceFile,
       destPath.slice(-4) === '.jsx' ? destPath.slice(0, -1) : destPath
     );

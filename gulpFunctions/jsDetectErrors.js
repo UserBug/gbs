@@ -1,6 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
+const path = require('path');
 const gulpIf = require('gulp-if');
 const eslint = require('gulp-eslint');
 const changed = require('gulp-changed');
@@ -22,15 +23,16 @@ function isFixed(file) {
  * @returns {function}
  */
 function jsDetectErrors(srcDir, libDir, eslintDetectErrorsFilePath) {
+  console.log('jsDetectErrors libDir', libDir);
   return function () {
     const previousErrors = eslintLog.getPreviousErrors(eslintDetectErrorsFilePath);
-    return gulp.src([srcDir + '/**/*.js', srcDir + '/**/*.jsx'], {base: './'})
-      .pipe(changed(libDir, {hasChanged: eslintLog.needDetectErrorsInFile.bind(null, previousErrors)}))
-      .pipe(count('eslint parse ## files on errors'))
+    return gulp.src([srcDir + '/**/*.js', srcDir + '/**/*.jsx'])
+      .pipe(changed(libDir, {hasChanged: eslintLog.needDetectErrorsInFile.bind(null, previousErrors, srcDir)}))
       .pipe(eslint({fix: true}))
-      .pipe(eslint.results(eslintLog.writeErrorsLog.bind(null, eslintDetectErrorsFilePath)))
+      .pipe(count('eslint parse ## files on errors'))
+      .pipe(eslint.results(eslintLog.writeErrorsLog.bind(null, srcDir, eslintDetectErrorsFilePath)))
       .pipe(eslint.format())
-      .pipe(gulpIf(isFixed, gulp.dest('./')));
+      .pipe(gulpIf(isFixed, gulp.dest(srcDir)));
   }
 }
 
