@@ -2,15 +2,12 @@
 
 const _ = require('lodash');
 const path = require('path');
-const chalk = require('chalk');
 const fs = require('fs-promise');
 const count = require('gulp-count');
 const mdeps = require('module-deps');
 const through = require('through2');
 const browserResolve = require('browser-resolve');
-
 const getEntries = require('./common/getEntries');
-const print = require('./common/print');
 
 /**
  * Find used in bundles modules and print info to
@@ -18,7 +15,6 @@ const print = require('./common/print');
  * @param {string} logDir
  * @param {string} modulesFileName
  * @param {string} [modulesRequiredInfoFileName]
- * @param {Array}  [modulesExternal]
  * @param {Array}  [modulesDontMoveToLibBundle]
  * @returns {function}
  */
@@ -27,13 +23,11 @@ function findUsedModules(
   logDir,
   modulesFileName,
   modulesRequiredInfoFileName,
-  modulesExternal,
   modulesDontMoveToLibBundle
 ) {
   return function () {
     const modules = [];
     const modulesRequiredInfo = {};
-    modulesExternal = modulesExternal || [];
     modulesDontMoveToLibBundle = modulesDontMoveToLibBundle || [];
     const rootPath = path.normalize('/');
     const pattern = path.sep === '/' ? /\/node_modules\// : /\\node_modules\\/;
@@ -48,7 +42,6 @@ function findUsedModules(
           if (filePath && pattern.test(String(filePath))) {
             if (
               modules.indexOf(id) < 0 &&
-              modulesExternal.indexOf(id) < 0 &&
               modulesDontMoveToLibBundle.indexOf(id) < 0
             ) {
               modules.push(id);

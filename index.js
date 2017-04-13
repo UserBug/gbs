@@ -12,7 +12,7 @@ const checkConfig = require('./gulpFunctions/common/checkConfig');
  * @param {boolean|string|Array} [config.uglifyBundles]
  * @param {string}  [config.entryPointsFiles]
  * @param {string}  [config.lessEntryPointsFiles]
- * @param {Array}   [config.modulesExternal]
+ * @param {{}}      [config.modulesShim]
  * @param {Array}   [config.modulesDontMoveToLibBundle]
  * @param {RegExp}  [config.delOldFoldersIgnoreRegExp]
  * @param {string}  [config.logDir]
@@ -50,14 +50,14 @@ function setGulpTasks(gulp, config) {
     config.entryPointsFiles,
     config.bundlesDir,
     modulesFilePath,
-    config.modulesExternal
+    config.modulesShim
   ));
 
   gulp.task('_buildLibBundle', gulpFunctions.buildLibBundle(
     config.bundlesDir,
     config.libsBundleFileName,
     modulesFilePath,
-    config.modulesExternal
+    config.modulesShim
   ));
 
   gulp.task('_uglifyLibBundle', gulpFunctions.uglifyBundles(
@@ -76,7 +76,6 @@ function setGulpTasks(gulp, config) {
     config.logDir,
     config.modulesFileName,
     config.modulesRequiredInfoFileName,
-    config.modulesExternal,
     config.modulesDontMoveToLibBundle
   ));
 

@@ -11,7 +11,11 @@ setGulpTasks(gulp, {
   uglifyBundles: 'public.js',
   entryPointsFiles: 'lib/frontSections/*/client.js',
   lessEntryPointsFiles: 'src/static/css/*.less',
-  modulesExternal: ['react', 'react-dom', 'react-router'],
+  modulesShim: {
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+    'react-router': 'ReactRouter'
+  },
   delOldFoldersIgnoreRegExp: /[\/\\]static([\/\\]|$)/ig,
 
   logDir: 'logs/build',

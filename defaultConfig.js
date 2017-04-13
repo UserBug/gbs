@@ -7,7 +7,7 @@
  *  uglifyBundles: boolean|string|Array,
  *  entryPointsFiles: string,
  *  lessEntryPointsFiles: string,
- *  modulesExternal: Array,
+ *  modulesShim: {},
  *  modulesDontMoveToLibBundle: Array,
  *  delOldFoldersIgnoreRegExp: RegExp,
  *  logDir: string,
@@ -26,7 +26,7 @@ const defaultConfig = {
   uglifyLibBundle: false,
   entryPointsFiles: '/lib/*/client.js',
   lessEntryPointsFiles: '/src/static/css/*.less',
-  modulesExternal: [],
+  modulesShim: {},
   modulesDontMoveToLibBundle: [],
   delOldFoldersIgnoreRegExp: /[\/\\]static([\/\\]|$)/ig,
 

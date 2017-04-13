@@ -4,7 +4,7 @@ const _ = require('lodash');
 const gulp = require('gulp');
 const path = require('path');
 const browserify = require('browserify');
-const browserifyshim = require('browserify-shim');
+const globalShim = require('browserify-global-shim');
 const source = require('vinyl-source-stream');
 
 /**
@@ -12,17 +12,21 @@ const source = require('vinyl-source-stream');
  * @param {string}    bundlesDir
  * @param {string}    libsBundleFileName
  * @param {string}    [modulesFilePath]
- * @param {string[]}  [modulesExternal]
+ * @param {string[]}  [modulesShim]
  * @returns {function}
  */
-function buildLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modulesExternal) {
+function buildLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modulesShim) {
+  modulesShim = modulesShim || {};
+  const shim = globalShim.configure(modulesShim);
+
+  const modulesShimNames = Object.keys(modulesShim);
   return function () {
     const modules = modulesFilePath ? require(path.resolve(modulesFilePath)) : [];
-    _.pullAll(modules, modulesExternal);
+    _.pullAll(modules, modulesShimNames);
+
     return browserify()
-      .external(modulesExternal || [])
       .require(modules)
-      .transform(browserifyshim)
+      .transform(shim)
       .bundle()
       .pipe(source(libsBundleFileName))
       .pipe(gulp.dest(bundlesDir));
