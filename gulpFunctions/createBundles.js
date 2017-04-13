@@ -21,7 +21,6 @@ const print = require('./common/print');
  */
 function createBundle(entryName, entryPath, bundlesDir, modules) {
   print('CreateBn', entryName);
-  console.log('createBundle modules', modules);
   return browserify(entryPath)
     .external(modules || [])
     .transform(browserifyshim)

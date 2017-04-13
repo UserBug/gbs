@@ -18,9 +18,7 @@ const source = require('vinyl-source-stream');
 function buildLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modulesExternal) {
   return function () {
     const modules = modulesFilePath ? require(path.resolve(modulesFilePath)) : [];
-    _.pullAll(modules, modulesExternal)
-    console.log('buildLibBundle modules', modules);
-    console.log('buildLibBundle modulesExternal', modulesExternal);
+    _.pullAll(modules, modulesExternal);
     return browserify()
       .external(modulesExternal || [])
       .require(modules)
