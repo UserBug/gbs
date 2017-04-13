@@ -19,7 +19,7 @@ const print = require('./common/print');
  * @param {string} modulesFileName
  * @param {string} [modulesRequiredInfoFileName]
  * @param {Array}  [modulesExternal]
- * @param {Array}  [modulesExceptions]
+ * @param {Array}  [modulesDontMoveToLibBundle]
  * @returns {function}
  */
 function findUsedModules(
@@ -28,13 +28,13 @@ function findUsedModules(
   modulesFileName,
   modulesRequiredInfoFileName,
   modulesExternal,
-  modulesExceptions
+  modulesDontMoveToLibBundle
 ) {
   return function () {
     const modules = [];
     const modulesRequiredInfo = {};
     modulesExternal = modulesExternal || [];
-    modulesExceptions = modulesExceptions || [];
+    modulesDontMoveToLibBundle = modulesDontMoveToLibBundle || [];
     const rootPath = path.normalize('/');
     const pattern = path.sep === '/' ? /\/node_modules\// : /\\node_modules\\/;
 
@@ -49,7 +49,7 @@ function findUsedModules(
             if (
               modules.indexOf(id) < 0 &&
               modulesExternal.indexOf(id) < 0 &&
-              modulesExceptions.indexOf(id) < 0
+              modulesDontMoveToLibBundle.indexOf(id) < 0
             ) {
               modules.push(id);
             }

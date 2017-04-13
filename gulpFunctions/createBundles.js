@@ -5,6 +5,7 @@ const path = require('path');
 const count = require('gulp-count');
 const merge = require('merge-stream');
 const browserify = require('browserify');
+const browserifyshim = require('browserify-shim');
 const source = require('vinyl-source-stream');
 
 const getEntries = require('./common/getEntries');
@@ -20,8 +21,10 @@ const print = require('./common/print');
  */
 function createBundle(entryName, entryPath, bundlesDir, modules) {
   print('CreateBn', entryName);
+  console.log('createBundle modules', modules);
   return browserify(entryPath)
     .external(modules || [])
+    .transform(browserifyshim)
     .bundle()
     .pipe(source(entryName + '.js'))
     .pipe(gulp.dest(bundlesDir));

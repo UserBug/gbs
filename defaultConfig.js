@@ -8,7 +8,7 @@
  *  entryPointsFiles: string,
  *  lessEntryPointsFiles: string,
  *  modulesExternal: Array,
- *  modulesExceptions: Array,
+ *  modulesDontMoveToLibBundle: Array,
  *  delOldFoldersIgnoreRegExp: RegExp,
  *  logDir: string,
  *  srcDir: string,
@@ -27,7 +27,7 @@ const defaultConfig = {
   entryPointsFiles: '/lib/*/client.js',
   lessEntryPointsFiles: '/src/static/css/*.less',
   modulesExternal: [],
-  modulesExceptions: ['react', 'react-dom', 'react-router'],
+  modulesDontMoveToLibBundle: [],
   delOldFoldersIgnoreRegExp: /[\/\\]static([\/\\]|$)/ig,
 
   logDir: 'logs/build',

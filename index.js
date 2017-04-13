@@ -13,7 +13,7 @@ const checkConfig = require('./gulpFunctions/common/checkConfig');
  * @param {string}  [config.entryPointsFiles]
  * @param {string}  [config.lessEntryPointsFiles]
  * @param {Array}   [config.modulesExternal]
- * @param {Array}   [config.modulesExceptions]
+ * @param {Array}   [config.modulesDontMoveToLibBundle]
  * @param {RegExp}  [config.delOldFoldersIgnoreRegExp]
  * @param {string}  [config.logDir]
  * @param {string}  [config.srcDir]
@@ -77,7 +77,7 @@ function setGulpTasks(gulp, config) {
     config.modulesFileName,
     config.modulesRequiredInfoFileName,
     config.modulesExternal,
-    config.modulesExceptions
+    config.modulesDontMoveToLibBundle
   ));
 
   gulp.task('buildCss', gulpFunctions.buildCss(
