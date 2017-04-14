@@ -41,9 +41,7 @@
     "path-exists": "^3.0.0",
     "pretty-hrtime": "^1.0.3",
     "through2": "^2.0.3",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "devDependencies": {
+    "vinyl-source-stream": "^1.1.0",
     "babel-eslint": "^7.2.2",
     "eslint": "^3.19.0",
     "eslint-plugin-react": "^6.10.3"
