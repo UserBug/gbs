@@ -6,15 +6,15 @@
     "email": "proboo.dev@gmail.comm",
     "name": "Stas Kochenkov"
   },
-  "bugs": {
-    "url": "https://bitbucket.org/Stas-k/gbs/overview"
-  },
   "license": "MIT",
-  "homepage": "https://bitbucket.org/Stas-k/gbs/overview",
+  "homepage": "https://github.com/UserBug/gbs",
   "main": "index.js",
   "repository" : {
     "type" : "git",
     "url" : "https://github.com/UserBug/gbs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/UserBug/gbs/issues"
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
