@@ -12,9 +12,9 @@
   "license": "MIT",
   "homepage": "https://bitbucket.org/Stas-k/gbs/overview",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://Stas-k@bitbucket.org/Stas-k/gbs.git"
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/UserBug/gbs.git"
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
