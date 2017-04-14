@@ -40,7 +40,7 @@ function setGulpTasks(gulp, config) {
     config.delOldFoldersIgnoreRegExp
   ));
 
-  gulp.task('_detectErrors', gulpFunctions.jsDetectErrors(
+  gulp.task('_eslintDetectErrors', gulpFunctions.jsDetectErrors(
     config.srcDir,
     config.libDir,
     config.eslintDetectErrorsFileName ? config.logDir + '/' + config.eslintDetectErrorsFileName : null
@@ -91,7 +91,7 @@ function setGulpTasks(gulp, config) {
 
   gulp.task('prepare', sequence(
     '_delOldFolders',
-    '_detectErrors',
+    '_eslintDetectErrors',
     ['buildSrc', 'buildCss']
   ));
 

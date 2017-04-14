@@ -21,7 +21,7 @@ function isFixed(file) {
  * @param {string|undefined}  [eslintDetectErrorsFilePath]
  * @returns {function}
  */
-function jsDetectErrors(srcDir, libDir, eslintDetectErrorsFilePath) {
+function eslintDetectErrors(srcDir, libDir, eslintDetectErrorsFilePath) {
   return function () {
     const previousErrors = eslintLog.getPreviousErrors(eslintDetectErrorsFilePath);
     return gulp.src([srcDir + '/**/*.js', srcDir + '/**/*.jsx'])
@@ -34,4 +34,4 @@ function jsDetectErrors(srcDir, libDir, eslintDetectErrorsFilePath) {
   }
 }
 
-module.exports = jsDetectErrors;
+module.exports = eslintDetectErrors;
