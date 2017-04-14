@@ -3,7 +3,7 @@
   "description": "Build system based on Gulp, for isomorphic applications",
   "version": "1.0.0",
   "author": {
-    "email": "proboo.dev@gmail.comm",
+    "email": "proboo.dev@gmail.com",
     "name": "Stas Kochenkov"
   },
   "license": "MIT",
