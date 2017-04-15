@@ -50,14 +50,11 @@ In root diectory of application create **gulpfile.js** or copy and rename [examp
 $ npm run buildLibAndStart
 ```
 ___
-
 # GBS Documentation
 ## Init configs
-To initialize GBS, you need to set object with configs in gulpfile.js
-Example of configs You can find in [defaultConfig.js](https://github.com/UserBug/gbs/blob/master/defaultConfig.js) from GBS
 |Config key|Type|Default|Description|Example|
 |:-|:-|-:|:-|:-|
-|srcDir|*string*||Directory which contains JS files with ES6, ES7, JSX|'src'|
+|srcDir|*string*| |Directory which contains JS files with ES6, ES7, JSX|'src'|
 |libDir|*string*||In this directory will placed transpiled in to ES5 JS files|'lib'|
 |entryPointsFiles|*string*||By using this pattern GBS will be looking files which are entry points for client bundles|'/lib/*/client.js'|
 |bundlesDir|*string*||In this directory will be created client bundles|'lib/static/js'|
@@ -69,7 +66,7 @@ Example of configs You can find in [defaultConfig.js](https://github.com/UserBug
 |uglifyLibBundle|*boolean*|false|Need uglify client libs bundle?|true|
 |modulesShim|*object*|{}|Configure modules which will be included as separate JavaScript files in HTML. Such as: jQuery, React... More details in [browserify-global-shim](https://github.com/rluba/browserify-global-shim)|{'react': 'React'}|
 |modulesDontMoveToLibBundle|*array of strings*|[]|List of node_modules names which will be leave in client bundles and don't included to libs bundle.|['lodash']|
-|delOldFoldersIgnoreRegExp|*RegExp*|```/[\/\\]static([\/\\]|$)/ig```|Regular expression which shows what files and dirs need to leave in ```libDir```, even they are missing in ```srcDir```||
+|delOldFoldersIgnoreRegExp|*RegExp*| regexp for 'static' dir |Regular expression which shows what files and dirs need to leave in `libDir`, even they are missing in `srcDir`||
 |modulesFileName|*string*|'modules.json'|Name for log file which contains list of all required node_modules on client side||
-|modulesRequiredInfoFileName|*string*|'modulesRequiredBy.json'|Name for log file which contains detailed information about what client files in ```srcDir``` require node_modules||
+|modulesRequiredInfoFileName|*string*|'modulesRequiredBy.json'|Name for log file which contains detailed information about what client files in `srcDir` require node_modules||
 |eslintDetectErrorsFileName|*string*|'eslintDetectErrorsLog.json'|Name for log file which will contain eslint errors ||
