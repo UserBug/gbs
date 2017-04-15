@@ -1,7 +1,7 @@
 {
   "name": "gbs",
   "description": "Build system based on Gulp, for isomorphic applications",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": {
     "email": "proboo.dev@gmail.com",
     "name": "Stas Kochenkov"
