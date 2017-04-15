@@ -53,7 +53,7 @@ function setGulpTasks(gulp, config) {
     config.modulesShim
   ));
 
-  gulp.task('_buildLibBundle', gulpFunctions.buildLibBundle(
+  gulp.task('_createLibBundle', gulpFunctions.createLibBundle(
     config.bundlesDir,
     config.libsBundleFileName,
     modulesFilePath,
@@ -98,7 +98,7 @@ function setGulpTasks(gulp, config) {
   gulp.task('buildLib', sequence(
     'prepare',
     'findUsedModules',
-    '_buildLibBundle',
+    '_createLibBundle',
     config.uglifyLibBundle ? '_uglifyLibBundle' : undefined
   ));
 

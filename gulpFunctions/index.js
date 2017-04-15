@@ -4,7 +4,7 @@ const gulpFunctions = {
   delOldFolders: require('./delOldFolders'),
   createBundles: require('./createBundles'),
   eslintDetectErrors: require('./eslintDetectErrors'),
-  buildLibBundle: require('./buildLibBundle'),
+  createLibBundle: require('./createLibBundle'),
   uglifyBundles: require('./uglifyBundles'),
   findUsedModules: require('./findUsedModules')
 };

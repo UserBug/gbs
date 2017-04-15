@@ -15,7 +15,7 @@ const source = require('vinyl-source-stream');
  * @param {string[]}  [modulesShim]
  * @returns {function}
  */
-function buildLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modulesShim) {
+function createLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modulesShim) {
   modulesShim = modulesShim || {};
   const shim = globalShim.configure(modulesShim);
 
@@ -33,4 +33,4 @@ function buildLibBundle(bundlesDir, libsBundleFileName, modulesFilePath, modules
   }
 }
 
-module.exports = buildLibBundle;
+module.exports = createLibBundle;
