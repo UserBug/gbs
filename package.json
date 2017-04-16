@@ -1,13 +1,24 @@
 {
   "name": "gbs",
   "description": "Build system based on Gulp, for isomorphic applications",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": {
     "email": "proboo.dev@gmail.com",
     "name": "Stas Kochenkov"
   },
   "license": "MIT",
   "homepage": "https://github.com/UserBug/gbs",
+  "keywords": [
+    "gbs",
+    "gulp build system",
+    "build",
+    "system",
+    "isomorphic",
+    "javascript",
+    "gulp",
+    "browserify",
+    "eslint"
+  ],
   "main": "index.js",
   "repository": {
     "type": "git",
