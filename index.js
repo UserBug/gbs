@@ -40,12 +40,6 @@ function setGulpTasks(gulp, config) {
     config.delOldFoldersIgnoreRegExp
   ));
 
-  gulp.task('_eslintDetectErrors', gulpFunctions.eslintDetectErrors(
-    config.srcDir,
-    config.libDir,
-    config.eslintDetectErrorsFileName ? config.logDir + '/' + config.eslintDetectErrorsFileName : null
-  ));
-
   gulp.task('_createBundles', gulpFunctions.createBundles(
     config.entryPointsFiles,
     config.bundlesDir,
@@ -71,12 +65,10 @@ function setGulpTasks(gulp, config) {
     config.libsBundleFileName
   ));
 
-  gulp.task('findUsedModules', gulpFunctions.findUsedModules(
-    config.entryPointsFiles,
-    config.logDir,
-    config.modulesFileName,
-    config.modulesRequiredInfoFileName,
-    config.modulesDontMoveToLibBundle
+  gulp.task('eslintDetectErrors', gulpFunctions.eslintDetectErrors(
+    config.srcDir,
+    config.libDir,
+    config.eslintDetectErrorsFileName ? config.logDir + '/' + config.eslintDetectErrorsFileName : null
   ));
 
   gulp.task('buildCss', gulpFunctions.buildCss(
@@ -89,10 +81,12 @@ function setGulpTasks(gulp, config) {
     config.libDir
   ));
 
-  gulp.task('prepare', sequence(
-    '_delOldFolders',
-    '_eslintDetectErrors',
-    ['buildSrc', 'buildCss']
+  gulp.task('findUsedModules', gulpFunctions.findUsedModules(
+    config.entryPointsFiles,
+    config.logDir,
+    config.modulesFileName,
+    config.modulesRequiredInfoFileName,
+    config.modulesDontMoveToLibBundle
   ));
 
   gulp.task('buildLib', sequence(
@@ -102,10 +96,21 @@ function setGulpTasks(gulp, config) {
     config.uglifyLibBundle ? '_uglifyLibBundle' : undefined
   ));
 
+  gulp.task('prepare', sequence(
+    '_delOldFolders',
+    'eslintDetectErrors',
+    ['buildSrc', 'buildCss']
+  ));
+
   gulp.task('build', sequence(
     'prepare',
     '_createBundles',
     config.uglifyBundles ? '_uglifyBundles' : undefined
+  ));
+
+  gulp.task('buildLibAndBundles', sequence(
+    'buildLib',
+    'build'
   ));
 
   gulp.task('default', sequence('build'));
