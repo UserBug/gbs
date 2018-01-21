@@ -89,31 +89,41 @@ function setGulpTasks(gulp, config) {
     config.modulesDontMoveToLibBundle
   ));
 
-  gulp.task('buildLib', sequence(
-    'prepare',
-    'findUsedModules',
-    '_createLibBundle',
-    config.uglifyLibBundle ? '_uglifyLibBundle' : undefined
-  ));
+  gulp.task('buildLib', function (cb) {
+    sequence(
+      'prepare',
+      'findUsedModules',
+      '_createLibBundle',
+      config.uglifyLibBundle ? '_uglifyLibBundle' : undefined
+    )(cb)
+  });
 
-  gulp.task('prepare', sequence(
-    '_delOldFolders',
-    'eslintDetectErrors',
-    ['buildSrc', 'buildCss']
-  ));
+  gulp.task('prepare', function (cb) {
+    sequence(
+      '_delOldFolders',
+      'eslintDetectErrors',
+      ['buildSrc', 'buildCss']
+    )(cb)
+  });
 
-  gulp.task('build', sequence(
-    'prepare',
-    '_createBundles',
-    config.uglifyBundles ? '_uglifyBundles' : undefined
-  ));
+  gulp.task('build', function (cb) {
+    sequence(
+      'prepare',
+      '_createBundles',
+      config.uglifyBundles ? '_uglifyBundles' : undefined
+    )(cb)
+  });
 
-  gulp.task('buildLibAndBundles', sequence(
-    'buildLib',
-    'build'
-  ));
+  gulp.task('buildLibAndBundles', function (cb) {
+    sequence(
+      'buildLib',
+      'build'
+    )(cb)
+  });
 
-  gulp.task('default', sequence('build'));
+  gulp.task('default', function (cb) {
+    sequence('build')(cb)
+  });
 
   return gulp;
 }
